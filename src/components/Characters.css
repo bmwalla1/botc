@@ -1,8 +1,8 @@
 .characters-page {
-  max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
   padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
 }
 
 .characters-page h1 {
@@ -30,11 +30,11 @@
 }
 
 .character-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
   padding: 1rem 0;
-  justify-content: flex-start;
+  width: 100%;
 }
 
 .character-card {
@@ -45,8 +45,8 @@
   text-align: center;
   transition: all 0.3s ease;
   border: 2px solid transparent;
-  flex: 0 0 auto;
-  width: 200px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .character-card:hover {
@@ -72,6 +72,17 @@
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+  .characters-page {
+    padding: 1.5rem;
+  }
+  
+  .character-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
 @media (max-width: 768px) {
   .characters-page {
     padding: 1rem;
@@ -87,12 +98,12 @@
   }
   
   .character-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 1rem;
   }
   
   .character-card {
     padding: 1rem;
-    width: 150px;
   }
   
   .character-image {
@@ -106,8 +117,25 @@
 }
 
 @media (max-width: 480px) {
+  .characters-page {
+    padding: 0.5rem;
+  }
+  
+  .characters-page h1 {
+    font-size: 1.8rem;
+  }
+  
+  .section-title {
+    font-size: 1.3rem;
+  }
+  
+  .character-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 0.8rem;
+  }
+  
   .character-card {
-    width: 120px;
+    padding: 0.8rem;
   }
   
   .character-image {
