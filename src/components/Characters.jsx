@@ -45,6 +45,46 @@ function getCharacterImage(type, character) {
   return `/src/assets/${type}/Icon_${character}.png`
 }
 
+// Function to format character name for wiki URL
+function formatCharacterNameForWiki(filename) {
+  // Convert to proper case and handle special cases
+  const formatted = filename
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+  
+  // Handle special cases that don't match the wiki URL format
+  const specialCases = {
+    'High Priestess': 'High_Priestess',
+    'Devils Advocate': 'Devils_Advocate',
+    'Evil Twin': 'Evil_Twin',
+    'Scarlet Woman': 'Scarlet_Woman',
+    'Lord Of Typhon': 'Lord_of_Typhon',
+    'Plague Doctor': 'Plaguedoctor',
+    'Puzzle Master': 'Puzzlemaster',
+    'Village Idiot': 'Village_Idiot',
+    'Tea Lady': 'Tea_Lady',
+    'Town Crier': 'Town_Crier',
+    'Snake Charmer': 'Snake_Charmer',
+    'Poppy Grower': 'Poppy_Grower',
+    'High Priestess': 'High_Priestess'
+  }
+  
+  return specialCases[formatted] || formatted.replace(/\s+/g, '_')
+}
+
+// Function to get wiki URL for a character
+function getWikiUrl(character) {
+  const wikiName = formatCharacterNameForWiki(character)
+  return `https://wiki.bloodontheclocktower.com/${wikiName}`
+}
+
+// Function to handle character card click
+function handleCharacterClick(character) {
+  const wikiUrl = getWikiUrl(character)
+  window.open(wikiUrl, '_blank', 'noopener,noreferrer')
+}
+
 function Characters() {
   return (
     <div className="characters-page">
@@ -59,7 +99,12 @@ function Characters() {
             {characters.map(character => {
               const imageSrc = getCharacterImage(type, character)
               return (
-                <div key={character} className="character-card">
+                <div 
+                  key={character} 
+                  className="character-card clickable"
+                  onClick={() => handleCharacterClick(character)}
+                  title={`Click to view ${formatCharacterName(character)} on the Blood on the Clocktower Wiki`}
+                >
                   {imageSrc && (
                     <img 
                       src={imageSrc} 
@@ -68,6 +113,9 @@ function Characters() {
                     />
                   )}
                   <p className="character-name">{formatCharacterName(character)}</p>
+                  <div className="wiki-link-indicator">
+                    <span>📖</span>
+                  </div>
                 </div>
               )
             })}

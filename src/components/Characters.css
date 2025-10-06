@@ -47,12 +47,59 @@
   border: 2px solid transparent;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
+}
+
+.character-card.clickable {
+  cursor: pointer;
 }
 
 .character-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   border-color: #3498db;
+}
+
+.character-card.clickable:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
+  border-color: #3498db;
+}
+
+.wiki-link-indicator {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.character-card.clickable:hover .wiki-link-indicator {
+  opacity: 1;
+}
+
+.character-card.clickable:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.character-card.clickable .character-name {
+  position: relative;
+}
+
+.character-card.clickable .character-name::after {
+  content: "→";
+  position: absolute;
+  right: -1.5rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  color: #3498db;
+  font-weight: bold;
+}
+
+.character-card.clickable:hover .character-name::after {
+  opacity: 1;
 }
 
 .character-image {
