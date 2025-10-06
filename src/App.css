@@ -1,74 +1,22 @@
 .app {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  text-align: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .app h1 {
-  text-align: center;
   color: #2c3e50;
-  margin-bottom: 3rem;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
-}
-
-.character-section {
-  margin-bottom: 4rem;
-}
-
-.section-title {
-  color: #34495e;
-  font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  text-align: center;
-  border-bottom: 3px solid #3498db;
-  padding-bottom: 0.5rem;
-  display: inline-block;
-  width: 100%;
-}
-
-.character-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  padding: 1rem 0;
-  justify-content: flex-start;
-}
-
-.character-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  flex: 0 0 auto;
-  width: 200px;
-}
-
-.character-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  border-color: #3498db;
-}
-
-.character-image {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
   margin-bottom: 1rem;
-  border-radius: 8px;
 }
 
-.character-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin: 0;
-  line-height: 1.3;
+.app p {
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
 }
 
 /* Responsive design */
@@ -78,44 +26,10 @@
   }
   
   .app h1 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    font-size: 2.5rem;
   }
   
-  .section-title {
-    font-size: 1.5rem;
-  }
-  
-  .character-grid {
-    gap: 1rem;
-  }
-  
-  .character-card {
-    padding: 1rem;
-    width: 150px;
-  }
-  
-  .character-image {
-    width: 60px;
-    height: 60px;
-  }
-  
-  .character-name {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .character-card {
-    width: 120px;
-  }
-  
-  .character-image {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .character-name {
-    font-size: 0.8rem;
+  .app p {
+    font-size: 1rem;
   }
 }
