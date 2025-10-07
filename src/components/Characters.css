@@ -13,6 +13,19 @@
   font-weight: 700;
 }
 
+.characters-search {
+  max-width: 520px;
+  margin: 0 auto 1.5rem;
+}
+
+.characters-search-input {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
 .character-section {
   margin-bottom: 4rem;
 }

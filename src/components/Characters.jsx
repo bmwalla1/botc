@@ -1,3 +1,4 @@
+import { useState, useMemo } from 'react'
 import './Characters.css'
 import { characterGroups, characterDetails } from '../data/characters'
 
@@ -78,17 +79,33 @@ function handleCharacterClick(character) {
 }
 
 function Characters() {
+  const [query, setQuery] = useState('')
+  const normalizedQuery = query.trim().toLowerCase()
+  const entries = useMemo(() => Object.entries(characterGroups), [])
   return (
     <div className="characters-page">
       <h1>Blood on the Clocktower Characters</h1>
-      
-      {Object.entries(characterGroups).map(([type, characters]) => (
+      <div className="characters-search">
+        <input
+          type="text"
+          className="characters-search-input"
+          placeholder="Search characters..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
+      {entries.map(([type, characters]) => {
+        const filtered = normalizedQuery
+          ? characters.filter(c => formatCharacterName(c).toLowerCase().includes(normalizedQuery))
+          : characters
+        if (filtered.length === 0) return null
+        return (
         <div key={type} className="character-section">
           <h2 className="section-title">
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </h2>
           <div className="character-grid">
-            {characters.map(character => {
+            {filtered.map(character => {
               const imageSrc = getCharacterImage(type, character)
               return (
                 <div 
@@ -114,7 +131,8 @@ function Characters() {
             })}
           </div>
         </div>
-      ))}
+        )
+      })}
     </div>
   )
 }
