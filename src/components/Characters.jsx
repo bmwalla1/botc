@@ -31,12 +31,43 @@ const characterData = {
   ]
 }
 
-// Function to convert filename to proper character name
-function formatCharacterName(filename) {
-  return filename
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
+// Function to convert slug to proper character display name
+function formatCharacterName(slug) {
+  // Explicit overrides for multi-word and punctuated names
+  const displayNameOverrides = {
+    // Townsfolk
+    bountyhunter: 'Bounty Hunter',
+    cultleader: 'Cult Leader',
+    fortuneteller: 'Fortune Teller',
+    highpriestess: 'High Priestess',
+    poppygrower: 'Poppy Grower',
+    snakecharmer: 'Snake Charmer',
+    tealady: 'Tea Lady',
+    towncrier: 'Town Crier',
+    villageidiot: 'Village Idiot',
+    // Outsiders
+    plaguedoctor: 'Plague Doctor',
+    // Minions
+    devilsadvocate: "Devil's Advocate",
+    eviltwin: 'Evil Twin',
+    organgrinder: 'Organ Grinder',
+    pithag: 'Pit-Hag',
+    scarletwoman: 'Scarlet Woman',
+    // Demons
+    alhadikhia: 'Al-Hadikhia',
+    fanggu: 'Fang Gu',
+    lilmonsta: "Lil' Monsta",
+    lordoftyphon: 'Lord of Typhon',
+    nodashii: 'No Dashii'
+  }
+
+  if (displayNameOverrides[slug]) {
+    return displayNameOverrides[slug]
+  }
+
+  // Fallback: replace underscores with spaces and capitalize first letter only
+  const withSpaces = slug.replace(/_/g, ' ')
+  return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1)
 }
 
 // Function to get character image path
@@ -46,31 +77,24 @@ function getCharacterImage(type, character) {
 }
 
 // Function to format character name for wiki URL
-function formatCharacterNameForWiki(filename) {
-  // Convert to proper case and handle special cases
-  const formatted = filename
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-  
-  // Handle special cases that don't match the wiki URL format
-  const specialCases = {
-    'High Priestess': 'High_Priestess',
-    'Devils Advocate': 'Devils_Advocate',
-    'Evil Twin': 'Evil_Twin',
-    'Scarlet Woman': 'Scarlet_Woman',
-    'Lord Of Typhon': 'Lord_of_Typhon',
-    'Plague Doctor': 'Plaguedoctor',
-    'Puzzle Master': 'Puzzlemaster',
-    'Village Idiot': 'Village_Idiot',
-    'Tea Lady': 'Tea_Lady',
-    'Town Crier': 'Town_Crier',
-    'Snake Charmer': 'Snake_Charmer',
-    'Poppy Grower': 'Poppy_Grower',
-    'High Priestess': 'High_Priestess'
+function formatCharacterNameForWiki(slug) {
+  const displayName = formatCharacterName(slug)
+
+  // URL overrides for names with punctuation or specific casing rules
+  const urlOverrides = {
+    "Devil's Advocate": "Devil's_Advocate",
+    'Pit-Hag': 'Pit-Hag',
+    'Al-Hadikhia': 'Al-Hadikhia',
+    "Lil' Monsta": "Lil'_Monsta",
+    'Lord of Typhon': 'Lord_of_Typhon'
   }
-  
-  return specialCases[formatted] || formatted.replace(/\s+/g, '_')
+
+  if (urlOverrides[displayName]) {
+    return urlOverrides[displayName]
+  }
+
+  // Default: underscore-separated version of the display name
+  return displayName.replace(/\s+/g, '_')
 }
 
 // Function to get wiki URL for a character
