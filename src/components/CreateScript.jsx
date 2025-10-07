@@ -13,7 +13,7 @@ function CreateScript() {
   const [originalName, setOriginalName] = useState('')
   const location = useLocation()
 
-  const limits = { townsfolk: 13, outsiders: 4, minions: 4, demons: 4 }
+  const limits = { townsfolk: 13, outsiders: 5, minions: 5, demons: 5 }
 
   const selectedByGroup = useMemo(() => {
     return selected.reduce((acc, slug) => {
@@ -53,8 +53,8 @@ function CreateScript() {
   }, [location.search])
 
   const meetsMinimums = (selectedByGroup.townsfolk.length >= 13 &&
-    selectedByGroup.outsiders.length >= 4 &&
-    selectedByGroup.minions.length >= 4 &&
+    selectedByGroup.outsiders.length >= 5 &&
+    selectedByGroup.minions.length >= 5 &&
     selectedByGroup.demons.length >= 1)
 
   function openCreateModal() {
