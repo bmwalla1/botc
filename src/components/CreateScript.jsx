@@ -53,8 +53,8 @@ function CreateScript() {
   }, [location.search])
 
   const meetsMinimums = (selectedByGroup.townsfolk.length >= 13 &&
-    selectedByGroup.outsiders.length >= 5 &&
-    selectedByGroup.minions.length >= 5 &&
+    selectedByGroup.outsiders.length >= 4 &&
+    selectedByGroup.minions.length >= 4 &&
     selectedByGroup.demons.length >= 1)
 
   function openCreateModal() {
