@@ -66,9 +66,11 @@ function HomePage() {
             <p>You are logged in as admin. You can create scripts and manage the game.</p>
           </div>
         ) : (
-          <div className="user-message">
-            <p>The storyteller needs to create a script before the game can begin.</p>
-          </div>
+          !activeScript && (
+            <div className="user-message">
+              <p>The storyteller needs to create a script before the game can begin.</p>
+            </div>
+          )
         )}
       </div>
     </div>
