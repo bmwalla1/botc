@@ -84,7 +84,7 @@ function formatCharacterNameForWiki(slug) {
 }
 
 function getImagePath(type, slug) {
-  return `/src/assets/${type}/Icon_${slug}.png`
+  return `/assets/${type}/Icon_${slug}.png`
 }
 
 // Blurbs per character (restored from your previous entries)
