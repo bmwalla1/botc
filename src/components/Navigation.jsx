@@ -67,6 +67,14 @@ function Navigation() {
               Create Script
             </Link>
           )}
+          {isAuthenticated && (
+            <Link 
+              to="/scripts" 
+              className={`nav-link ${location.pathname === '/scripts' ? 'active' : ''}`}
+            >
+              Scripts
+            </Link>
+          )}
         </div>
 
         <div className="nav-auth desktop-nav">
@@ -119,6 +127,15 @@ function Navigation() {
               onClick={closeMobileMenu}
             >
               Create Script
+            </Link>
+          )}
+          {isAuthenticated && (
+            <Link 
+              to="/scripts" 
+              className={`mobile-nav-link ${location.pathname === '/scripts' ? 'active' : ''}`}
+              onClick={closeMobileMenu}
+            >
+              Scripts
             </Link>
           )}
           <div className="mobile-nav-auth">

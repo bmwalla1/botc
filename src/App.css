@@ -32,6 +32,24 @@
   margin-bottom: 2rem;
 }
 
+.home-script {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .home-script .script-row {
+    grid-template-columns: 42px 140px 1fr !important;
+    gap: 0.5rem !important;
+    padding: 0.4rem !important;
+  }
+  .home-script .row-icon { width: 42px; height: 42px; }
+  .home-script .row-name { font-size: 0.95rem; }
+  .home-script .row-blurb { font-size: 0.8rem; }
+}
+
 .admin-message {
   background: #d4edda;
   color: #155724;
