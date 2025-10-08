@@ -1,4 +1,7 @@
-const API_BASE_URL = 'http://localhost:3001/api'
+// Use relative URL for production, localhost for development
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '/api' 
+  : 'http://localhost:3001/api'
 
 class ApiError extends Error {
   constructor(message, status) {

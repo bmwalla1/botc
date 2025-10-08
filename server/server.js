@@ -17,6 +17,9 @@ const DATA_FILE = path.join(DATA_DIR, 'scripts.json')
 app.use(cors())
 app.use(express.json())
 
+// Serve static files from the dist directory
+app.use(express.static(path.join(__dirname, '..', 'dist')))
+
 // Ensure data directory exists
 async function ensureDataDir() {
   try {
@@ -212,6 +215,11 @@ app.delete('/api/scripts/active', async (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
+})
+
+// Catch-all handler: send back React's index.html file for any non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'))
 })
 
 // Start server

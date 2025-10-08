@@ -31,11 +31,7 @@ if ! command -v pm2 &> /dev/null; then
     npm install -g pm2
 fi
 
-# Check if serve is installed globally (for serving frontend)
-if ! command -v serve &> /dev/null; then
-    echo "📦 Installing serve for frontend hosting..."
-    npm install -g serve
-fi
+# Note: We're now using Express to serve the frontend, so no need for serve
 
 echo "📁 Creating necessary directories..."
 mkdir -p logs
@@ -65,8 +61,8 @@ echo "🏗️  Building frontend for production..."
 npm run build
 
 echo "🔄 Stopping existing processes (if any)..."
-pm2 stop botc-backend botc-frontend 2>/dev/null || true
-pm2 delete botc-backend botc-frontend 2>/dev/null || true
+pm2 stop botc-app 2>/dev/null || true
+pm2 delete botc-app 2>/dev/null || true
 
 echo "🚀 Starting application with PM2..."
 pm2 start ecosystem.config.cjs
@@ -80,8 +76,8 @@ pm2 startup
 echo "✅ Deployment complete!"
 echo ""
 echo "🌐 Your application should now be running:"
-echo "   Frontend: http://your-server-ip:3000"
-echo "   Backend API: http://your-server-ip:3001"
+echo "   Application: http://your-server-ip:3000"
+echo "   API: http://your-server-ip:3000/api"
 echo ""
 echo "📊 Useful commands:"
 echo "   pm2 status          - Check process status"
