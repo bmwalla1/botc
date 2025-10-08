@@ -214,8 +214,13 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-// Serve static files from the dist directory (after API routes)
-app.use(express.static(path.join(__dirname, '..', 'dist')))
+// Serve static files from the dist directory, but only for non-API routes
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return next() // Skip static file serving for API routes
+  }
+  express.static(path.join(__dirname, '..', 'dist'))(req, res, next)
+})
 
 // Catch-all handler: send back React's index.html file for any non-API routes
 app.get('*', (req, res) => {
