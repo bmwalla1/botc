@@ -69,7 +69,7 @@ pm2 stop botc-backend botc-frontend 2>/dev/null || true
 pm2 delete botc-backend botc-frontend 2>/dev/null || true
 
 echo "🚀 Starting application with PM2..."
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 
 echo "💾 Saving PM2 configuration..."
 pm2 save
