@@ -1,0 +1,43 @@
+{
+  "scripts": [
+    {
+      "id": "441f3818-e642-4e4d-bebc-35234ee869bb",
+      "name": "test",
+      "createdAt": "2025-10-08T16:13:28.347Z",
+      "groups": {
+        "townsfolk": [
+          "acrobat",
+          "alchemist",
+          "balloonist",
+          "bountyhunter",
+          "chambermaid",
+          "banshee",
+          "amnesiac",
+          "artist",
+          "cultleader",
+          "fisherman",
+          "fortuneteller",
+          "gambler",
+          "fool"
+        ],
+        "outsiders": [
+          "tinker",
+          "saint",
+          "puzzlemaster",
+          "plaguedoctor",
+          "ogre"
+        ],
+        "minions": [
+          "mastermind",
+          "godfather",
+          "harpy",
+          "marionette"
+        ],
+        "demons": [
+          "kazali"
+        ]
+      }
+    }
+  ],
+  "activeId": "441f3818-e642-4e4d-bebc-35234ee869bb"
+}

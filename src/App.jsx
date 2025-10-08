@@ -12,14 +12,26 @@ import { characterDetails } from './data/characters'
 function HomePage() {
   const { isAuthenticated, isLoading } = useAuth()
   const [activeScript, setActiveScript] = useState(null)
+  const [isLoadingScript, setIsLoadingScript] = useState(true)
 
   useEffect(() => {
-    import('./data/scripts').then(mod => {
-      setActiveScript(mod.getActiveScript())
-    })
+    const loadActiveScript = async () => {
+      try {
+        setIsLoadingScript(true)
+        const { getActiveScript } = await import('./data/scripts')
+        const script = await getActiveScript()
+        setActiveScript(script)
+      } catch (error) {
+        console.error('Failed to load active script:', error)
+      } finally {
+        setIsLoadingScript(false)
+      }
+    }
+    
+    loadActiveScript()
   }, [])
 
-  if (isLoading) {
+  if (isLoading || isLoadingScript) {
     return (
       <div className="app">
         <div className="loading">Loading...</div>

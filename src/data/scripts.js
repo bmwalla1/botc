@@ -1,61 +1,119 @@
-// Simple localStorage helpers for scripts
-const SCRIPTS_KEY = 'botc:scripts:list'
-const ACTIVE_ID_KEY = 'botc:scripts:activeId'
+// API-based script management
+import { scriptsApi, ApiError } from '../services/api'
 
-function readJson(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key)
-    if (!raw) return fallback
-    return JSON.parse(raw)
-  } catch (_) {
-    return fallback
+// Cache for scripts to avoid repeated API calls
+let scriptsCache = null
+let activeIdCache = null
+let lastFetch = 0
+const CACHE_DURATION = 5000 // 5 seconds
+
+async function getCachedScripts() {
+  const now = Date.now()
+  if (!scriptsCache || (now - lastFetch) > CACHE_DURATION) {
+    try {
+      scriptsCache = await scriptsApi.getScripts()
+      lastFetch = now
+    } catch (error) {
+      console.error('Failed to fetch scripts:', error)
+      return []
+    }
   }
+  return scriptsCache
 }
 
-function writeJson(key, value) {
-  localStorage.setItem(key, JSON.stringify(value))
+async function getCachedActiveId() {
+  if (activeIdCache === null) {
+    try {
+      activeIdCache = await scriptsApi.getActiveScriptId()
+    } catch (error) {
+      console.error('Failed to fetch active script ID:', error)
+      return null
+    }
+  }
+  return activeIdCache
 }
 
-export function getScripts() {
-  return readJson(SCRIPTS_KEY, [])
+export async function getScripts() {
+  return await getCachedScripts()
 }
 
-export function getActiveScriptId() {
-  return readJson(ACTIVE_ID_KEY, null)
+export async function getActiveScriptId() {
+  return await getCachedActiveId()
 }
 
-export function getActiveScript() {
-  const id = getActiveScriptId()
+export async function getActiveScript() {
+  const id = await getActiveScriptId()
   if (!id) return null
-  return getScripts().find(s => s.id === id) || null
+  const scripts = await getScripts()
+  return scripts.find(s => s.id === id) || null
 }
 
-export function saveScript(script) {
-  const scripts = getScripts()
-  const existingIndex = scripts.findIndex(s => s.id === script.id)
-  if (existingIndex >= 0) {
-    scripts[existingIndex] = script
-  } else {
-    scripts.push(script)
-  }
-  writeJson(SCRIPTS_KEY, scripts)
-}
-
-export function deleteScript(id) {
-  const scripts = getScripts().filter(s => s.id !== id)
-  writeJson(SCRIPTS_KEY, scripts)
-  const activeId = getActiveScriptId()
-  if (activeId === id) {
-    writeJson(ACTIVE_ID_KEY, null)
+export async function saveScript(script) {
+  try {
+    const { name, groups, makeActive = true } = script
+    const result = await scriptsApi.saveScript({ name, groups, makeActive })
+    
+    // Update cache
+    scriptsCache = null
+    activeIdCache = null
+    
+    return result
+  } catch (error) {
+    console.error('Failed to save script:', error)
+    throw error
   }
 }
 
-export function setActiveScript(id) {
-  writeJson(ACTIVE_ID_KEY, id)
+export async function updateScript(script) {
+  try {
+    const { id, name, groups, makeActive = true } = script
+    const result = await scriptsApi.updateScript(id, { name, groups, makeActive })
+    
+    // Update cache
+    scriptsCache = null
+    activeIdCache = null
+    
+    return result
+  } catch (error) {
+    console.error('Failed to update script:', error)
+    throw error
+  }
 }
 
-export function clearActiveScript() {
-  writeJson(ACTIVE_ID_KEY, null)
+export async function deleteScript(id) {
+  try {
+    await scriptsApi.deleteScript(id)
+    
+    // Update cache
+    scriptsCache = null
+    activeIdCache = null
+  } catch (error) {
+    console.error('Failed to delete script:', error)
+    throw error
+  }
 }
+
+export async function setActiveScript(id) {
+  try {
+    await scriptsApi.setActiveScript(id)
+    activeIdCache = id
+  } catch (error) {
+    console.error('Failed to set active script:', error)
+    throw error
+  }
+}
+
+export async function clearActiveScript() {
+  try {
+    await scriptsApi.clearActiveScript()
+    activeIdCache = null
+  } catch (error) {
+    console.error('Failed to clear active script:', error)
+    throw error
+  }
+}
+
+// Export ApiError for error handling in components
+export { ApiError }
 
 
