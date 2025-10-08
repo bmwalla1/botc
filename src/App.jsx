@@ -13,6 +13,14 @@ function HomePage() {
   const { isAuthenticated, isLoading } = useAuth()
   const [activeScript, setActiveScript] = useState(null)
   const [isLoadingScript, setIsLoadingScript] = useState(true)
+  const [expandedJinxes, setExpandedJinxes] = useState({})
+
+  const toggleJinxes = (characterSlug) => {
+    setExpandedJinxes(prev => ({
+      ...prev,
+      [characterSlug]: !prev[characterSlug]
+    }))
+  }
 
   useEffect(() => {
     const loadActiveScript = async () => {
@@ -59,11 +67,45 @@ function HomePage() {
                   <div className="script-list">
                     {(activeScript.groups[group] || []).map(slug => {
                       const d = characterDetails[slug]
+                      // Get all characters in the current script
+                      const allScriptCharacters = Object.values(activeScript.groups).flat()
+                      
+                      // Find jinxes that exist in the current script
+                      const relevantJinxes = (d?.jinxes || []).filter(jinx => 
+                        allScriptCharacters.includes(jinx.character)
+                      )
+                      
                       return (
-                        <div key={slug} className="script-row" style={{ gridTemplateColumns: '54px 200px 1fr' }}>
-                          <img className="row-icon" src={d?.image} alt={d?.name} />
-                          <div className="row-name">{d?.name}</div>
-                          <div className="row-blurb">{d?.blurb}</div>
+                        <div key={slug} className="character-container">
+                          <div className="script-row" style={{ gridTemplateColumns: '54px 200px 1fr auto' }}>
+                            <img className="row-icon" src={d?.image} alt={d?.name} />
+                            <div className="row-name">{d?.name}</div>
+                            <div className="row-blurb">{d?.blurb}</div>
+                            {relevantJinxes.length > 0 && (
+                              <button 
+                                className="jinx-toggle"
+                                onClick={() => toggleJinxes(slug)}
+                                title={expandedJinxes[slug] ? 'Hide jinxes' : 'Show jinxes'}
+                              >
+                                <span className="jinx-label">Jinxes</span>
+                                <span className="jinx-arrow">{expandedJinxes[slug] ? '▼' : '▶'}</span>
+                              </button>
+                            )}
+                          </div>
+                          {relevantJinxes.length > 0 && expandedJinxes[slug] && (
+                            <div className="jinx-container">
+                              {relevantJinxes.map((jinx, index) => {
+                                const jinxCharacter = characterDetails[jinx.character]
+                                return (
+                                  <div key={`${slug}-jinx-${index}`} className="jinx-row" style={{ gridTemplateColumns: '54px 200px 1fr' }}>
+                                    <img className="row-icon" src={jinxCharacter?.image} alt={jinxCharacter?.name} />
+                                    <div className="row-name">{jinxCharacter?.name}</div>
+                                    <div className="row-blurb jinx-description">{jinx.description}</div>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          )}
                         </div>
                       )
                     })}

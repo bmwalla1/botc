@@ -159,6 +159,36 @@
 .script-row .row-name { font-weight: 600; color: #111827; }
 .script-row .row-blurb { font-size: 0.85rem; color: #4b5563; }
 
+.character-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.jinx-icons-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 3px solid #6c757d;
+  flex-wrap: wrap;
+}
+
+.jinx-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 4px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.jinx-icon:hover {
+  opacity: 1;
+}
+
 /* Modal */
 .modal-backdrop {
   position: fixed;

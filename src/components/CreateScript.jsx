@@ -184,11 +184,34 @@ function CreateScript() {
                 <div className="script-list">
                   {(selectedByGroup[group] || []).map(slug => {
                     const details = characterDetails[slug]
+                    // Find jinxes that exist in the current selection
+                    const relevantJinxes = (details?.jinxes || []).filter(jinx => 
+                      selected.includes(jinx.character)
+                    )
+                    
                     return (
-                      <div key={slug} className="script-row" onClick={() => toggleCharacter(slug)} title="Remove from script">
-                        <img className="row-icon" src={details?.image} alt={details?.name} />
-                        <div className="row-name">{details?.name}</div>
-                        <div className="row-blurb">{details?.blurb}</div>
+                      <div key={slug} className="character-container">
+                        <div className="script-row" onClick={() => toggleCharacter(slug)} title="Remove from script">
+                          <img className="row-icon" src={details?.image} alt={details?.name} />
+                          <div className="row-name">{details?.name}</div>
+                          <div className="row-blurb">{details?.blurb}</div>
+                        </div>
+                        {relevantJinxes.length > 0 && (
+                          <div className="jinx-icons-row">
+                            {relevantJinxes.map((jinx, index) => {
+                              const jinxCharacter = characterDetails[jinx.character]
+                              return (
+                                <img 
+                                  key={`${slug}-jinx-${index}`}
+                                  className="jinx-icon" 
+                                  src={jinxCharacter?.image} 
+                                  alt={jinxCharacter?.name}
+                                  title={`${jinxCharacter?.name}: ${jinx.description}`}
+                                />
+                              )
+                            })}
+                          </div>
+                        )}
                       </div>
                     )
                   })}
