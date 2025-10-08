@@ -61,8 +61,8 @@ echo "🏗️  Building frontend for production..."
 npm run build
 
 echo "🔄 Stopping existing processes (if any)..."
-pm2 stop botc-app 2>/dev/null || true
-pm2 delete botc-app 2>/dev/null || true
+pm2 stop all 2>/dev/null || true
+pm2 delete all 2>/dev/null || true
 
 echo "🚀 Starting application with PM2..."
 pm2 start ecosystem.config.cjs
