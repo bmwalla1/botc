@@ -22,6 +22,49 @@ function HomePage() {
     }))
   }
 
+  // Helper function to get character type priority (higher number = higher priority)
+  const getCharacterTypePriority = (characterSlug) => {
+    if (characterDetails[characterSlug]?.type === 'demons') return 4
+    if (characterDetails[characterSlug]?.type === 'minions') return 3
+    if (characterDetails[characterSlug]?.type === 'outsiders') return 2
+    if (characterDetails[characterSlug]?.type === 'townsfolk') return 1
+    return 0
+  }
+
+  // Helper function to deduplicate jinxes between character pairs
+  const deduplicateJinxes = (allScriptCharacters) => {
+    const jinxMap = new Map() // key: sorted character pair, value: { jinx, displayCharacter }
+    
+    allScriptCharacters.forEach(characterSlug => {
+      const character = characterDetails[characterSlug]
+      if (!character?.jinxes) return
+      
+      character.jinxes.forEach(jinx => {
+        if (!allScriptCharacters.includes(jinx.character)) return
+        
+        // Create a sorted key for the character pair
+        const pair = [characterSlug, jinx.character].sort()
+        const pairKey = pair.join('|')
+        
+        // Check if we already have this jinx pair
+        if (jinxMap.has(pairKey)) {
+          const existing = jinxMap.get(pairKey)
+          const currentPriority = getCharacterTypePriority(characterSlug)
+          const existingPriority = getCharacterTypePriority(existing.displayCharacter)
+          
+          // Keep the jinx on the character with higher priority (evil characters)
+          if (currentPriority > existingPriority) {
+            jinxMap.set(pairKey, { jinx, displayCharacter: characterSlug })
+          }
+        } else {
+          jinxMap.set(pairKey, { jinx, displayCharacter: characterSlug })
+        }
+      })
+    })
+    
+    return jinxMap
+  }
+
   useEffect(() => {
     const loadActiveScript = async () => {
       try {
@@ -58,22 +101,28 @@ function HomePage() {
               <p>Active Script: <strong>{activeScript.name}</strong></p>
             </div>
             <div className="home-script">
-              {(['townsfolk','outsiders','minions','demons']).map(group => (
-                <div key={group} className="script-group">
-                  <div className="script-group-header">
-                    <span className={`pill pill-${group}`}>{group.toUpperCase()}</span>
-                    <span className="count">{activeScript.groups[group]?.length || 0}</span>
-                  </div>
-                  <div className="script-list">
-                    {(activeScript.groups[group] || []).map(slug => {
-                      const d = characterDetails[slug]
-                      // Get all characters in the current script
-                      const allScriptCharacters = Object.values(activeScript.groups).flat()
-                      
-                      // Find jinxes that exist in the current script
-                      const relevantJinxes = (d?.jinxes || []).filter(jinx => 
-                        allScriptCharacters.includes(jinx.character)
-                      )
+              {(['townsfolk','outsiders','minions','demons']).map(group => {
+                // Get all characters in the current script for deduplication
+                const allScriptCharacters = Object.values(activeScript.groups).flat()
+                const deduplicatedJinxes = deduplicateJinxes(allScriptCharacters)
+                
+                return (
+                  <div key={group} className="script-group">
+                    <div className="script-group-header">
+                      <span className={`pill pill-${group}`}>{group.toUpperCase()}</span>
+                      <span className="count">{activeScript.groups[group]?.length || 0}</span>
+                    </div>
+                    <div className="script-list">
+                      {(activeScript.groups[group] || []).map(slug => {
+                        const d = characterDetails[slug]
+                        
+                        // Find jinxes that should be displayed on this character (after deduplication)
+                        const relevantJinxes = []
+                        deduplicatedJinxes.forEach(({ jinx, displayCharacter }) => {
+                          if (displayCharacter === slug) {
+                            relevantJinxes.push(jinx)
+                          }
+                        })
                       
                       return (
                         <div key={slug} className="character-container">
@@ -119,7 +168,8 @@ function HomePage() {
                     })}
                   </div>
                 </div>
-              ))}
+                )
+              })}
             </div>
           </>
         )}
