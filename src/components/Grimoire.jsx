@@ -11,6 +11,7 @@ function Grimoire() {
   const [showPlayerInput, setShowPlayerInput] = useState(false)
   const [selectedPlayer, setSelectedPlayer] = useState(null)
   const [showCharacterModal, setShowCharacterModal] = useState(false)
+  const [showStatusModal, setShowStatusModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
   const [isLoadingGrimoire, setIsLoadingGrimoire] = useState(true)
@@ -73,7 +74,9 @@ function Grimoire() {
       id: index,
       name,
       character: null,
-      position: index
+      position: index,
+      isDead: false,
+      hasGhostVote: false
     }))
     
     setPlayers(newPlayers)
@@ -83,7 +86,11 @@ function Grimoire() {
 
   const handlePlayerClick = (player) => {
     setSelectedPlayer(player)
-    setShowCharacterModal(true)
+    if (player.character) {
+      setShowStatusModal(true)
+    } else {
+      setShowCharacterModal(true)
+    }
   }
 
   const handleCharacterSelect = (characterSlug) => {
@@ -91,7 +98,7 @@ function Grimoire() {
     
     setPlayers(prev => prev.map(player => 
       player.id === selectedPlayer.id 
-        ? { ...player, character: characterSlug }
+        ? { ...player, character: characterSlug, isDead: false, hasGhostVote: false }
         : player
     ))
     
@@ -119,6 +126,58 @@ function Grimoire() {
     } finally {
       setIsSaving(false)
     }
+  }
+
+  const handleUnassignCharacter = () => {
+    if (!selectedPlayer) return
+    
+    setPlayers(prev => prev.map(player => 
+      player.id === selectedPlayer.id 
+        ? { ...player, character: null, isDead: false, hasGhostVote: false }
+        : player
+    ))
+    
+    setShowStatusModal(false)
+    setSelectedPlayer(null)
+  }
+
+  const handleMarkDead = () => {
+    if (!selectedPlayer) return
+    
+    setPlayers(prev => prev.map(player => 
+      player.id === selectedPlayer.id 
+        ? { ...player, isDead: true, hasGhostVote: true }
+        : player
+    ))
+    
+    setShowStatusModal(false)
+    setSelectedPlayer(null)
+  }
+
+  const handleMarkAlive = () => {
+    if (!selectedPlayer) return
+    
+    setPlayers(prev => prev.map(player => 
+      player.id === selectedPlayer.id 
+        ? { ...player, isDead: false, hasGhostVote: false }
+        : player
+    ))
+    
+    setShowStatusModal(false)
+    setSelectedPlayer(null)
+  }
+
+  const handleToggleGhostVote = () => {
+    if (!selectedPlayer) return
+    
+    setPlayers(prev => prev.map(player => 
+      player.id === selectedPlayer.id 
+        ? { ...player, hasGhostVote: !player.hasGhostVote }
+        : player
+    ))
+    
+    setShowStatusModal(false)
+    setSelectedPlayer(null)
   }
 
   const getFilteredCharacters = () => {
@@ -263,7 +322,7 @@ function Grimoire() {
                       cx={position.x}
                       cy={position.y}
                       r="40"
-                      className={`player-circle ${player.character ? 'assigned' : 'empty'}`}
+                      className={`player-circle ${player.character ? 'assigned' : 'empty'} ${player.isDead ? 'dead' : ''}`}
                       onClick={() => handlePlayerClick(player)}
                     />
                     {character && (
@@ -273,15 +332,35 @@ function Grimoire() {
                         width="60"
                         height="60"
                         href={character.image}
-                        className="character-icon"
-                        onClick={() => handleRemoveCharacter(player.id)}
-                        title="Click to remove character"
+                        className={`character-icon ${player.isDead ? 'dead' : ''}`}
+                        onClick={() => handlePlayerClick(player)}
+                        title="Click to manage character"
                       />
+                    )}
+                    {player.isDead && (
+                      <text
+                        x={position.x}
+                        y={position.y - 50}
+                        className="dead-indicator"
+                        textAnchor="middle"
+                      >
+                        ☠
+                      </text>
+                    )}
+                    {player.hasGhostVote && (
+                      <text
+                        x={position.x + 35}
+                        y={position.y - 35}
+                        className="ghost-vote-indicator"
+                        textAnchor="middle"
+                      >
+                        👻
+                      </text>
                     )}
                     <text
                       x={position.x}
                       y={position.y + 60}
-                      className="player-name"
+                      className={`player-name ${player.isDead ? 'dead' : ''}`}
                       textAnchor="middle"
                     >
                       {player.name}
@@ -349,6 +428,91 @@ function Grimoire() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Character Status Modal */}
+      {showStatusModal && selectedPlayer && (
+        <div className="modal-overlay" onClick={() => setShowStatusModal(false)}>
+          <div className="character-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Manage {selectedPlayer.name}</h3>
+              <button 
+                className="close-btn"
+                onClick={() => setShowStatusModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="status-modal-content">
+              <div className="character-info-display">
+                {selectedPlayer.character && (
+                  <>
+                    <img 
+                      src={characterDetails[selectedPlayer.character]?.image} 
+                      alt={characterDetails[selectedPlayer.character]?.name}
+                      className="status-character-image"
+                    />
+                    <div className="status-character-details">
+                      <h4>{characterDetails[selectedPlayer.character]?.name}</h4>
+                      <span className={`character-type ${characterDetails[selectedPlayer.character]?.type}`}>
+                        {characterDetails[selectedPlayer.character]?.type?.toUpperCase()}
+                      </span>
+                      {selectedPlayer.isDead && (
+                        <div className="status-indicators">
+                          <span className="dead-status">☠ Dead</span>
+                          {selectedPlayer.hasGhostVote && (
+                            <span className="ghost-vote-status">👻 Has Ghost Vote</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+              
+              <div className="status-actions">
+                {!selectedPlayer.isDead ? (
+                  <>
+                    <button 
+                      className="status-btn danger-btn"
+                      onClick={handleMarkDead}
+                    >
+                      Mark as Dead
+                    </button>
+                    <button 
+                      className="status-btn secondary-btn"
+                      onClick={handleUnassignCharacter}
+                    >
+                      Unassign Character
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      className="status-btn success-btn"
+                      onClick={handleMarkAlive}
+                    >
+                      Mark as Alive
+                    </button>
+                    <button 
+                      className={`status-btn ${selectedPlayer.hasGhostVote ? 'warning-btn' : 'info-btn'}`}
+                      onClick={handleToggleGhostVote}
+                    >
+                      {selectedPlayer.hasGhostVote ? 'Remove Ghost Vote' : 'Add Ghost Vote'}
+                    </button>
+                    <button 
+                      className="status-btn secondary-btn"
+                      onClick={handleUnassignCharacter}
+                    >
+                      Unassign Character
+                    </button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
