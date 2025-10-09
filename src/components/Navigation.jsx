@@ -75,6 +75,14 @@ function Navigation() {
               Scripts
             </Link>
           )}
+          {isAuthenticated && (
+            <Link 
+              to="/grimoire" 
+              className={`nav-link ${location.pathname === '/grimoire' ? 'active' : ''}`}
+            >
+              Grimoire
+            </Link>
+          )}
         </div>
 
         <div className="nav-auth desktop-nav">
@@ -136,6 +144,15 @@ function Navigation() {
               onClick={closeMobileMenu}
             >
               Scripts
+            </Link>
+          )}
+          {isAuthenticated && (
+            <Link 
+              to="/grimoire" 
+              className={`mobile-nav-link ${location.pathname === '/grimoire' ? 'active' : ''}`}
+              onClick={closeMobileMenu}
+            >
+              Grimoire
             </Link>
           )}
           <div className="mobile-nav-auth">

@@ -6,6 +6,7 @@ import Login from './components/Login'
 import CreateScript from './components/CreateScript'
 import Scripts from './components/Scripts'
 import Characters from './components/Characters'
+import Grimoire from './components/Grimoire'
 import './App.css'
 import { characterDetails } from './data/characters'
 
@@ -223,6 +224,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Scripts />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/grimoire" 
+                element={
+                  <ProtectedRoute>
+                    <Grimoire />
                   </ProtectedRoute>
                 } 
               />
