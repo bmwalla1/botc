@@ -338,24 +338,24 @@ function Grimoire() {
                       />
                     )}
                     {player.isDead && (
-                      <text
-                        x={position.x}
-                        y={position.y - 50}
-                        className="dead-indicator"
-                        textAnchor="middle"
-                      >
-                        ☠
-                      </text>
+                      <image
+                        x={position.x - 30}
+                        y={position.y - 58}
+                        width="60"
+                        height="60"
+                        href="/assets/grim_tokens/deathshroud.png"
+                        className="deathshroud-indicator"
+                      />
                     )}
                     {player.hasGhostVote && (
-                      <text
-                        x={position.x + 35}
-                        y={position.y - 35}
+                      <image
+                        x={position.x - 30}
+                        y={position.y - 90}
+                        width="60"
+                        height="60"
+                        href="/assets/grim_tokens/ghostvote.png"
                         className="ghost-vote-indicator"
-                        textAnchor="middle"
-                      >
-                        👻
-                      </text>
+                      />
                     )}
                     <text
                       x={position.x}
