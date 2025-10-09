@@ -94,4 +94,26 @@ export const scriptsApi = {
   }
 }
 
+export const grimoireApi = {
+  // Get grimoire state
+  async getGrimoire() {
+    return apiRequest('/grimoire')
+  },
+
+  // Update grimoire state
+  async updateGrimoire(players, gameActive) {
+    return apiRequest('/grimoire', {
+      method: 'PUT',
+      body: JSON.stringify({ players, gameActive })
+    })
+  },
+
+  // Start new game (clear grimoire)
+  async startNewGame() {
+    return apiRequest('/grimoire/new-game', {
+      method: 'POST'
+    })
+  }
+}
+
 export { ApiError }

@@ -12,6 +12,7 @@ const app = express()
 const PORT = process.env.PORT || 3001
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data')
 const DATA_FILE = path.join(DATA_DIR, 'scripts.json')
+const GRIMOIRE_FILE = path.join(DATA_DIR, 'grimoire.json')
 
 // Middleware
 app.use(cors())
@@ -41,6 +42,23 @@ async function readScripts() {
 async function writeScripts(data) {
   await ensureDataDir()
   await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2))
+}
+
+// Read grimoire state from file
+async function readGrimoire() {
+  try {
+    await fs.access(GRIMOIRE_FILE)
+    const data = await fs.readFile(GRIMOIRE_FILE, 'utf8')
+    return JSON.parse(data)
+  } catch {
+    return { players: [], gameActive: false }
+  }
+}
+
+// Write grimoire state to file
+async function writeGrimoire(data) {
+  await ensureDataDir()
+  await fs.writeFile(GRIMOIRE_FILE, JSON.stringify(data, null, 2))
 }
 
 // API Routes
@@ -206,6 +224,59 @@ app.delete('/api/scripts/active', async (req, res) => {
   } catch (error) {
     console.error('Error clearing active script:', error)
     res.status(500).json({ error: 'Failed to clear active script' })
+  }
+})
+
+// Grimoire API Routes
+
+// Get grimoire state
+app.get('/api/grimoire', async (req, res) => {
+  try {
+    const grimoire = await readGrimoire()
+    res.json(grimoire)
+  } catch (error) {
+    console.error('Error reading grimoire:', error)
+    res.status(500).json({ error: 'Failed to read grimoire state' })
+  }
+})
+
+// Update grimoire state
+app.put('/api/grimoire', async (req, res) => {
+  try {
+    const { players, gameActive } = req.body
+    
+    if (!Array.isArray(players)) {
+      return res.status(400).json({ error: 'Players must be an array' })
+    }
+
+    const grimoire = {
+      players,
+      gameActive: Boolean(gameActive),
+      updatedAt: new Date().toISOString()
+    }
+
+    await writeGrimoire(grimoire)
+    res.json(grimoire)
+  } catch (error) {
+    console.error('Error updating grimoire:', error)
+    res.status(500).json({ error: 'Failed to update grimoire state' })
+  }
+})
+
+// Start new game (clear grimoire)
+app.post('/api/grimoire/new-game', async (req, res) => {
+  try {
+    const grimoire = {
+      players: [],
+      gameActive: false,
+      updatedAt: new Date().toISOString()
+    }
+
+    await writeGrimoire(grimoire)
+    res.json(grimoire)
+  } catch (error) {
+    console.error('Error starting new game:', error)
+    res.status(500).json({ error: 'Failed to start new game' })
   }
 })
 
