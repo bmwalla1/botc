@@ -77,14 +77,22 @@ function HomePage() {
                       
                       return (
                         <div key={slug} className="character-container">
-                          <div className="script-row" style={{ gridTemplateColumns: '54px 200px 1fr auto' }}>
+                          <div 
+                            className="script-row clickable-row" 
+                            style={{ gridTemplateColumns: '54px 200px 1fr auto' }}
+                            onClick={() => window.open(d?.url, '_blank')}
+                            title={`Click to open ${d?.name} wiki page`}
+                          >
                             <img className="row-icon" src={d?.image} alt={d?.name} />
                             <div className="row-name">{d?.name}</div>
                             <div className="row-blurb">{d?.blurb}</div>
                             {relevantJinxes.length > 0 && (
                               <button 
                                 className="jinx-toggle"
-                                onClick={() => toggleJinxes(slug)}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  toggleJinxes(slug)
+                                }}
                                 title={expandedJinxes[slug] ? 'Hide jinxes' : 'Show jinxes'}
                               >
                                 <span className="jinx-label">Jinxes</span>
