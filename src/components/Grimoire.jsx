@@ -76,7 +76,8 @@ function Grimoire() {
       character: null,
       position: index,
       isDead: false,
-      hasGhostVote: false
+      hasGhostVote: false,
+      reminderTokens: []
     }))
     
     setPlayers(newPlayers)
@@ -236,6 +237,49 @@ function Grimoire() {
       }
     })
     return allTokens
+  }
+
+  const getAvailableReminderTokens = () => {
+    const allTokens = getAllReminderTokens()
+    const assignedTokens = []
+    players.forEach(player => {
+      if (player.reminderTokens) {
+        assignedTokens.push(...player.reminderTokens)
+      }
+    })
+    return allTokens.filter(token => !assignedTokens.includes(token))
+  }
+
+  const handleAddReminderToken = (token) => {
+    if (!selectedPlayer) return
+    
+    setPlayers(prev => prev.map(player => 
+      player.id === selectedPlayer.id 
+        ? { ...player, reminderTokens: [...(player.reminderTokens || []), token] }
+        : player
+    ))
+    
+    // Update selectedPlayer to reflect the change immediately
+    setSelectedPlayer(prev => ({
+      ...prev,
+      reminderTokens: [...(prev.reminderTokens || []), token]
+    }))
+  }
+
+  const handleRemoveReminderToken = (token) => {
+    if (!selectedPlayer) return
+    
+    setPlayers(prev => prev.map(player => 
+      player.id === selectedPlayer.id 
+        ? { ...player, reminderTokens: (player.reminderTokens || []).filter(t => t !== token) }
+        : player
+    ))
+    
+    // Update selectedPlayer to reflect the change immediately
+    setSelectedPlayer(prev => ({
+      ...prev,
+      reminderTokens: (prev.reminderTokens || []).filter(t => t !== token)
+    }))
   }
 
   if (isLoadingScript || isLoadingGrimoire) {
@@ -501,6 +545,30 @@ function Grimoire() {
                           )}
                         </div>
                       )}
+                      {(selectedPlayer.reminderTokens && selectedPlayer.reminderTokens.length > 0) && (
+                        <div className="player-reminder-tokens">
+                          <h5>Assigned Reminder Tokens:</h5>
+                          <div className="player-tokens-row">
+                            {selectedPlayer.reminderTokens.map((token, index) => (
+                              <div key={index} className="player-token-item">
+                                <img
+                                  src={`/assets/grim_tokens/${token}`}
+                                  alt={token.replace('.png', '').replace(/_/g, ' ')}
+                                  className="player-reminder-token"
+                                  title={token.replace('.png', '').replace(/_/g, ' ')}
+                                />
+                                <button
+                                  className="remove-token-btn"
+                                  onClick={() => handleRemoveReminderToken(token)}
+                                  title="Remove token"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </>
                 )}
@@ -545,6 +613,24 @@ function Grimoire() {
                   </>
                 )}
               </div>
+
+              {getAvailableReminderTokens().length > 0 && (
+                <div className="add-reminder-tokens">
+                  <h5>Add Reminder Token:</h5>
+                  <div className="available-tokens-row">
+                    {getAvailableReminderTokens().map((token, index) => (
+                      <img
+                        key={index}
+                        src={`/assets/grim_tokens/${token}`}
+                        alt={token.replace('.png', '').replace(/_/g, ' ')}
+                        className="available-reminder-token"
+                        title={`Add ${token.replace('.png', '').replace(/_/g, ' ')}`}
+                        onClick={() => handleAddReminderToken(token)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

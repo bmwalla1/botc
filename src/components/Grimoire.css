@@ -571,6 +571,102 @@
   background: #7f8c8d;
 }
 
+/* Reminder Token Management Styles */
+.player-reminder-tokens {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+}
+
+.player-reminder-tokens h5 {
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.player-tokens-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.player-token-item {
+  position: relative;
+  display: inline-block;
+}
+
+.player-reminder-token {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+  background: white;
+}
+
+.remove-token-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.remove-token-btn:hover {
+  background: #c0392b;
+}
+
+.add-reminder-tokens {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+}
+
+.add-reminder-tokens h5 {
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.available-tokens-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.available-reminder-token {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #e1e8ed;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.available-reminder-token:hover {
+  border-color: #3498db;
+  transform: scale(1.1);
+}
+
 /* Utility Classes */
 .no-script {
   text-align: center;
