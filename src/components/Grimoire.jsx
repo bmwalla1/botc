@@ -298,6 +298,17 @@ function Grimoire() {
     }))
   }
 
+  const handleRemoveCircleToken = (playerId, tokenIndex) => {
+    setPlayers(prev => prev.map(player => 
+      player.id === playerId 
+        ? { 
+            ...player, 
+            reminderTokens: player.reminderTokens.filter((_, index) => index !== tokenIndex)
+          }
+        : player
+    ))
+  }
+
   if (isLoadingScript || isLoadingGrimoire) {
     return (
       <div className="grimoire">
@@ -451,11 +462,12 @@ function Grimoire() {
                             src={`/assets/grim_tokens/${token}`}
                             alt={token.replace('.png', '').replace(/_/g, ' ')}
                             className="circle-reminder-token"
-                            title={token.replace('.png', '').replace(/_/g, ' ')}
+                            title={`Click to remove ${token.replace('.png', '').replace(/_/g, ' ')}`}
                             style={{
                               left: tokenX - position.x - 35,
                               top: tokenY - position.y - 35 - 60
                             }}
+                            onClick={() => handleRemoveCircleToken(player.id, tokenIndex)}
                           />
                         )
                       })}
