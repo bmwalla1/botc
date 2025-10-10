@@ -254,6 +254,8 @@ function Grimoire() {
 
   const getAvailableReminderTokens = () => {
     const allTokens = []
+    
+    // Get tokens from assigned characters
     players.forEach(player => {
       if (player.character) {
         const character = characterDetails[player.character]
@@ -266,6 +268,38 @@ function Grimoire() {
         }
       }
     })
+    
+    // Add special global tokens based on script conditions
+    if (activeScript) {
+      // Always add Drunk token
+      if (!allTokens.includes('drunk.png')) {
+        allTokens.push('drunk.png')
+      }
+      
+      // Add Marionette token if Marionette is in the script
+      const hasMarionette = Object.values(activeScript.groups).flat().includes('marionette')
+      if (hasMarionette && !allTokens.includes('marionette.png')) {
+        allTokens.push('marionette.png')
+      }
+      
+      // Add all outsider tokens if Hermit is in the script
+      const hasHermit = Object.values(activeScript.groups).flat().includes('hermit')
+      if (hasHermit) {
+        const outsiderTokens = [
+          'barber.png', 'butler.png', 'damsel.png', 'drunk.png', 'golem.png', 
+          'goon.png', 'hatter.png', 'heretic.png', 'hermit.png', 'klutz.png', 
+          'lunatic.png', 'moonchild.png', 'mutant.png', 'ogre.png', 'plaguedoctor.png', 
+          'politician.png', 'puzzlemaster.png', 'recluse.png', 'saint.png', 
+          'snitch.png', 'sweetheart.png', 'tinker.png', 'zealot.png'
+        ]
+        outsiderTokens.forEach(token => {
+          if (!allTokens.includes(token)) {
+            allTokens.push(token)
+          }
+        })
+      }
+    }
+    
     return allTokens
   }
 
