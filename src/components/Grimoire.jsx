@@ -221,6 +221,23 @@ function Grimoire() {
     }
   }
 
+  const getAllReminderTokens = () => {
+    const allTokens = []
+    players.forEach(player => {
+      if (player.character) {
+        const character = characterDetails[player.character]
+        if (character && character.reminderTokens) {
+          character.reminderTokens.forEach(token => {
+            if (!allTokens.includes(token)) {
+              allTokens.push(token)
+            }
+          })
+        }
+      }
+    })
+    return allTokens
+  }
+
   if (isLoadingScript || isLoadingGrimoire) {
     return (
       <div className="grimoire">
@@ -307,6 +324,21 @@ function Grimoire() {
             <div className="player-count">
               {players.length} Player{players.length !== 1 ? 's' : ''}
               {isSaving && <span className="saving-indicator"> • Saving...</span>}
+            </div>
+          </div>
+
+          <div className="reminder-tokens-container">
+            <h3>Reminder Tokens</h3>
+            <div className="reminder-tokens-row">
+              {getAllReminderTokens().map((token, index) => (
+                <img
+                  key={index}
+                  src={`/assets/grim_tokens/${token}`}
+                  alt={token.replace('.png', '').replace(/_/g, ' ')}
+                  className="reminder-token"
+                  title={token.replace('.png', '').replace(/_/g, ' ')}
+                />
+              ))}
             </div>
           </div>
 

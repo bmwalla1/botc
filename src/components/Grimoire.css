@@ -173,6 +173,34 @@
   font-weight: 500;
 }
 
+.reminder-tokens-container {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.reminder-tokens-container h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.reminder-tokens-row {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 0 20px;
+}
+
+.reminder-token {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .players-circle {
   position: relative;
   width: 600px;
