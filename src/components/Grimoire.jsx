@@ -16,6 +16,8 @@ function Grimoire() {
   const [filterType, setFilterType] = useState('all')
   const [isLoadingGrimoire, setIsLoadingGrimoire] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
+  const [showRandomizeModal, setShowRandomizeModal] = useState(false)
+  const [selectedRoles, setSelectedRoles] = useState([])
 
   useEffect(() => {
     const loadData = async () => {
@@ -215,6 +217,28 @@ function Grimoire() {
     return Math.max(...players.map(player => player.reminderTokens?.length || 0), 0)
   }
 
+  const getCharacterDistribution = (playerCount) => {
+    const distributions = {
+      5: { townsfolk: 3, outsiders: 0, minions: 1, demons: 1 },
+      6: { townsfolk: 3, outsiders: 1, minions: 1, demons: 1 },
+      7: { townsfolk: 5, outsiders: 0, minions: 1, demons: 1 },
+      8: { townsfolk: 5, outsiders: 1, minions: 1, demons: 1 },
+      9: { townsfolk: 5, outsiders: 2, minions: 1, demons: 1 },
+      10: { townsfolk: 7, outsiders: 0, minions: 2, demons: 1 },
+      11: { townsfolk: 7, outsiders: 1, minions: 2, demons: 1 },
+      12: { townsfolk: 7, outsiders: 2, minions: 2, demons: 1 },
+      13: { townsfolk: 9, outsiders: 0, minions: 3, demons: 1 },
+      14: { townsfolk: 9, outsiders: 1, minions: 3, demons: 1 }
+    }
+    
+    // For 15+ players, use the same distribution as 15
+    if (playerCount >= 15) {
+      return { townsfolk: 9, outsiders: 2, minions: 3, demons: 1 }
+    }
+    
+    return distributions[playerCount] || { townsfolk: 0, outsiders: 0, minions: 0, demons: 0 }
+  }
+
   const getPlayerPosition = (index, total) => {
     const angle = (index / total) * 2 * Math.PI - Math.PI / 2 // Start at 12 o'clock
     const maxTokens = getMaxReminderTokens()
@@ -366,6 +390,76 @@ function Grimoire() {
     }))
   }
 
+  const handleRandomizeRoles = () => {
+    // Clear all assigned characters, alignments, and reminder tokens
+    setPlayers(prev => prev.map(player => ({
+      ...player,
+      character: null,
+      isAlignmentFlipped: false,
+      reminderTokens: [],
+      isDead: false,
+      hasGhostVote: false
+    })))
+    
+    setShowRandomizeModal(true)
+  }
+
+  const getRandomCharacters = (type, count) => {
+    if (!activeScript) return []
+    
+    const availableCharacters = Object.values(activeScript.groups).flat()
+      .filter(slug => characterDetails[slug]?.type === type)
+      .map(slug => characterDetails[slug])
+    
+    // Shuffle and take the requested count
+    const shuffled = [...availableCharacters].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, count)
+  }
+
+  const randomizeCharacterSelection = () => {
+    const distribution = getCharacterDistribution(players.length)
+    const randomRoles = []
+    
+    // Get random characters for each type
+    randomRoles.push(...getRandomCharacters('townsfolk', distribution.townsfolk))
+    randomRoles.push(...getRandomCharacters('outsiders', distribution.outsiders))
+    randomRoles.push(...getRandomCharacters('minions', distribution.minions))
+    randomRoles.push(...getRandomCharacters('demons', distribution.demons))
+    
+    setSelectedRoles(randomRoles)
+  }
+
+  const removeSelectedRole = (roleToRemove) => {
+    setSelectedRoles(prev => prev.filter(role => role.id !== roleToRemove.id))
+  }
+
+  const addSelectedRole = (role) => {
+    if (!selectedRoles.find(r => r.id === role.id)) {
+      setSelectedRoles(prev => [...prev, role])
+    }
+  }
+
+  const assignRolesToPlayers = () => {
+    if (selectedRoles.length === 0) return
+    
+    // Shuffle the selected roles
+    const shuffledRoles = [...selectedRoles].sort(() => Math.random() - 0.5)
+    
+    // Assign roles to the first N players where N is the number of selected roles
+    setPlayers(prev => prev.map((player, index) => {
+      if (index < shuffledRoles.length) {
+        return {
+          ...player,
+          character: shuffledRoles[index].id
+        }
+      }
+      return player
+    }))
+    
+    setShowRandomizeModal(false)
+    setSelectedRoles([])
+  }
+
   if (isLoadingScript || isLoadingGrimoire) {
     return (
       <div className="grimoire">
@@ -448,6 +542,13 @@ function Grimoire() {
               disabled={isSaving}
             >
               {isSaving ? 'Saving...' : 'New Game'}
+            </button>
+            <button 
+              className="randomize-roles-btn"
+              onClick={handleRandomizeRoles}
+              disabled={isSaving || players.length === 0}
+            >
+              Randomize Roles
             </button>
             <div className="player-count">
               {players.length} Player{players.length !== 1 ? 's' : ''}
@@ -731,6 +832,95 @@ function Grimoire() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Randomize Roles Modal */}
+      {showRandomizeModal && (
+        <div className="modal-overlay" onClick={() => setShowRandomizeModal(false)}>
+          <div className="character-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Randomize Roles</h3>
+              <button 
+                className="close-btn"
+                onClick={() => setShowRandomizeModal(false)}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="randomize-controls">
+              <button 
+                className="randomize-btn"
+                onClick={randomizeCharacterSelection}
+              >
+                Randomize Selection
+              </button>
+              <div className="role-count">
+                Selected: {selectedRoles.length} / {players.length} roles
+              </div>
+            </div>
+
+            <div className="selected-roles-section">
+              <h4>Selected Roles:</h4>
+              <div className="selected-roles-grid">
+                {selectedRoles.map((role, index) => (
+                  <div
+                    key={index}
+                    className="selected-role-item"
+                    onClick={() => removeSelectedRole(role)}
+                  >
+                    <img 
+                      src={role.image} 
+                      alt={role.name}
+                      className="role-image"
+                    />
+                    <div className="role-info">
+                      <h5 className="role-name">{role.name}</h5>
+                      <span className={`role-type ${role.type}`}>
+                        {role.type.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="available-roles-section">
+              <h4>Available Roles:</h4>
+              <div className="available-roles-grid">
+                {getFilteredCharacters().map(character => (
+                  <div
+                    key={character.id}
+                    className={`available-role-item ${selectedRoles.find(r => r.id === character.id) ? 'selected' : ''}`}
+                    onClick={() => addSelectedRole(character)}
+                  >
+                    <img 
+                      src={character.image} 
+                      alt={character.name}
+                      className="role-image"
+                    />
+                    <div className="role-info">
+                      <h5 className="role-name">{character.name}</h5>
+                      <span className={`role-type ${character.type}`}>
+                        {character.type.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="modal-actions">
+              <button 
+                className="assign-roles-btn"
+                onClick={assignRolesToPlayers}
+                disabled={selectedRoles.length === 0}
+              >
+                Assign Roles ({selectedRoles.length} selected)
+              </button>
             </div>
           </div>
         </div>
