@@ -726,7 +726,7 @@ const reminderTokens = {
   amnesiac: ['amnesiac.png'],
   artist: ['artist.png'],
   atheist: [],
-  balloonist: ['ballonist_demon.png', 'ballonist_townsfolk.png', 'ballonist_outsider.png', 'ballonist_minion.png'],
+  balloonist: ['balloonist_demon.png', 'balloonist_townsfolk.png', 'balloonist_outsider.png', 'balloonist_minion.png'],
   banshee: ['banshee.png'],
   bountyhunter: ['bountyhunter.png'],
   cannibal: ['cannibal_died.png', 'cannibal_posion.png'],

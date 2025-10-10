@@ -315,19 +315,19 @@ function Grimoire() {
         allTokens.push('marionette.png')
       }
       
-      // Add all outsider tokens if Hermit is in the script
-      const hasHermit = Object.values(activeScript.groups).flat().includes('hermit')
-      if (hasHermit) {
-        const outsiderTokens = [
-          'barber.png', 'butler.png', 'damsel.png', 'drunk.png', 'golem.png', 
-          'goon.png', 'hatter.png', 'heretic.png', 'hermit.png', 'klutz.png', 
-          'lunatic.png', 'moonchild.png', 'mutant.png', 'ogre.png', 'plaguedoctor.png', 
-          'politician.png', 'puzzlemaster.png', 'recluse.png', 'saint.png', 
-          'snitch.png', 'sweetheart.png', 'tinker.png', 'zealot.png'
-        ]
-        outsiderTokens.forEach(token => {
-          if (!allTokens.includes(token)) {
-            allTokens.push(token)
+      // Add outsider tokens if Hermit is in play (only for outsiders with reminder tokens)
+      const hermitInPlay = players.some(player => player.character === 'hermit')
+      if (hermitInPlay) {
+        // Get all outsider characters from the script
+        const outsiderSlugs = activeScript.groups.outsiders || []
+        outsiderSlugs.forEach(slug => {
+          const character = characterDetails[slug]
+          if (character && character.reminderTokens && character.reminderTokens.length > 0) {
+            character.reminderTokens.forEach(token => {
+              if (!allTokens.includes(token)) {
+                allTokens.push(token)
+              }
+            })
           }
         })
       }
