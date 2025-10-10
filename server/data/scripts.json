@@ -1,122 +1,319 @@
 {
   "scripts": [
     {
-      "id": "441f3818-e642-4e4d-bebc-35234ee869bb",
-      "name": "test",
-      "createdAt": "2025-10-08T16:13:28.347Z",
+      "id": "6a207a55-ca49-48d2-a29f-b6466f1acc24",
+      "name": "Anonymous Dishonesty",
+      "createdAt": "2025-10-08T19:07:48.138Z",
       "groups": {
         "townsfolk": [
-          "acrobat",
-          "alchemist",
-          "balloonist",
-          "bountyhunter",
-          "chambermaid",
-          "banshee",
-          "amnesiac",
-          "artist",
-          "cultleader",
-          "fisherman",
-          "fortuneteller",
-          "gambler",
-          "fool"
+          "investigator",
+          "grandmother",
+          "shugenja",
+          "pixie",
+          "highpriestess",
+          "general",
+          "flowergirl",
+          "undertaker",
+          "savant",
+          "alsaahir",
+          "farmer",
+          "atheist",
+          "banshee"
         ],
         "outsiders": [
-          "tinker",
-          "saint",
-          "puzzlemaster",
-          "plaguedoctor",
-          "ogre"
+          "ogre",
+          "drunk",
+          "sweetheart",
+          "hatter",
+          "barber"
         ],
         "minions": [
-          "mastermind",
           "godfather",
           "harpy",
+          "cerenovus",
+          "scarletwoman",
           "marionette"
         ],
         "demons": [
-          "kazali"
+          "ojo"
         ]
       }
     },
     {
-      "id": "878b451e-7d1b-4f3a-b3a4-db20fdd607ed",
-      "name": "The Paradise Gardens",
-      "createdAt": "2025-10-10T18:38:44.159Z",
+      "id": "12f224b0-8ebf-4ba6-8d16-81a9a995269e",
+      "name": "Contempt",
+      "createdAt": "2025-10-08T23:07:59.455Z",
+      "groups": {
+        "townsfolk": [
+          "steward",
+          "noble",
+          "bountyhunter",
+          "highpriestess",
+          "balloonist",
+          "mathematician",
+          "oracle",
+          "slayer",
+          "fisherman",
+          "juggler",
+          "soldier",
+          "cannibal",
+          "ravenkeeper"
+        ],
+        "outsiders": [
+          "butler",
+          "sweetheart",
+          "plaguedoctor",
+          "barber"
+        ],
+        "minions": [
+          "xaan",
+          "marionette",
+          "scarletwoman",
+          "vizier"
+        ],
+        "demons": [
+          "nodashii",
+          "imp",
+          "ojo"
+        ]
+      }
+    },
+    {
+      "id": "1eed3dc7-7675-485f-a7b1-b3e451954b77",
+      "name": "Five Nights At Levi’s",
+      "createdAt": "2025-10-09T12:35:23.918Z",
       "groups": {
         "townsfolk": [
           "clockmaker",
           "pixie",
           "empath",
           "dreamer",
-          "king",
+          "balloonist",
+          "mathematician",
           "fortuneteller",
-          "gambler",
-          "oracle",
-          "innkeeper",
-          "chambermaid",
-          "slayer",
-          "philosopher",
-          "choirboy"
+          "undertaker",
+          "savant",
+          "amnesiac",
+          "fisherman",
+          "artist",
+          "mayor"
         ],
         "outsiders": [
+          "saint",
+          "sweetheart",
           "recluse",
           "drunk",
-          "goon",
-          "klutz",
-          "barber"
+          "politician"
         ],
         "minions": [
-          "witch",
-          "spy",
+          "widow",
+          "poisoner",
           "baron",
-          "marionette",
-          "vizier"
+          "marionette"
         ],
         "demons": [
-          "alhadikhia"
+          "leviathan"
         ]
       }
     },
     {
-      "id": "b1b3a063-ff4f-49fb-ab8e-c9306d14216b",
-      "name": "Lunar Eclipse",
-      "createdAt": "2025-10-10T20:36:14.455Z",
+      "id": "8ae33bd1-68b6-42b6-b86c-762b4d326648",
+      "name": "Insanity and Intuition",
+      "createdAt": "2025-10-09T15:44:02.938Z",
       "groups": {
         "townsfolk": [
-          "grandmother",
+          "knight",
           "pixie",
-          "sailor",
-          "chambermaid",
-          "mathematician",
-          "innkeeper",
-          "lycanthrope",
-          "savant",
-          "artist",
-          "tealady",
-          "magician",
-          "mayor",
-          "cannibal"
+          "shugenja",
+          "highpriestess",
+          "general",
+          "preacher",
+          "fortuneteller",
+          "towncrier",
+          "oracle",
+          "amnesiac",
+          "ravenkeeper",
+          "poppygrower",
+          "mayor"
         ],
         "outsiders": [
-          "goon",
-          "barber",
-          "lunatic",
-          "puzzlemaster"
+          "puzzlemaster",
+          "plaguedoctor",
+          "mutant",
+          "lunatic"
         ],
         "minions": [
-          "godfather",
-          "devilsadvocate",
-          "spy",
-          "assassin",
-          "marionette"
+          "poisoner",
+          "harpy",
+          "cerenovus",
+          "boomdandy"
         ],
         "demons": [
           "nodashii",
-          "zombuul",
+          "imp",
+          "vigormortis",
+          "fanggu"
+        ]
+      }
+    },
+    {
+      "id": "9474fa7a-596e-4cf2-858f-eae98c5e8666",
+      "name": "Irrational Behavior",
+      "createdAt": "2025-10-09T15:51:04.615Z",
+      "groups": {
+        "townsfolk": [
+          "noble",
+          "librarian",
+          "shugenja",
+          "highpriestess",
+          "balloonist",
+          "villageidiot",
+          "fortuneteller",
+          "monk",
+          "oracle",
+          "seamstress",
+          "alsaahir",
+          "banshee",
+          "cannibal"
+        ],
+        "outsiders": [
+          "hermit",
+          "mutant",
+          "zealot",
+          "puzzlemaster"
+        ],
+        "minions": [
+          "cerenovus",
+          "poisoner",
+          "wraith",
+          "wizard",
+          "witch"
+        ],
+        "demons": [
+          "lordoftyphon",
+          "fanggu",
           "vigormortis"
+        ]
+      }
+    },
+    {
+      "id": "56f6c32d-9358-4017-a898-97bdbc6a4c54",
+      "name": "The Midnight Oasis",
+      "createdAt": "2025-10-09T16:35:00.809Z",
+      "groups": {
+        "townsfolk": [
+          "noble",
+          "balloonist",
+          "snakecharmer",
+          "savant",
+          "amnesiac",
+          "engineer",
+          "huntsman",
+          "professor",
+          "fisherman",
+          "farmer",
+          "poppygrower",
+          "cannibal",
+          "atheist"
+        ],
+        "outsiders": [
+          "damsel",
+          "drunk",
+          "golem",
+          "barber"
+        ],
+        "minions": [
+          "mezepheles",
+          "poisoner",
+          "pithag",
+          "psychopath"
+        ],
+        "demons": [
+          "alhadikhia",
+          "vigormortis"
+        ]
+      }
+    },
+    {
+      "id": "41e136bd-5cd9-4fe0-8a49-26ebf874aad4",
+      "name": "Monkey Do Math",
+      "createdAt": "2025-10-09T16:39:13.733Z",
+      "groups": {
+        "townsfolk": [
+          "sailor",
+          "villageidiot",
+          "mathematician",
+          "innkeeper",
+          "acrobat",
+          "lycanthrope",
+          "exorcist",
+          "gossip",
+          "courtier",
+          "professor",
+          "alchemist",
+          "tealady",
+          "mayor"
+        ],
+        "outsiders": [
+          "goon",
+          "tinker",
+          "zealot",
+          "moonchild"
+        ],
+        "minions": [
+          "godfather",
+          "poisoner",
+          "devilsadvocate",
+          "assassin",
+          "organgrinder"
+        ],
+        "demons": [
+          "pukka",
+          "shabaloth",
+          "zombuul"
+        ]
+      }
+    },
+    {
+      "id": "e503db5a-6c5c-4031-9685-707a1e37c86b",
+      "name": "The Ones You Least Expect",
+      "createdAt": "2025-10-09T16:41:43.962Z",
+      "groups": {
+        "townsfolk": [
+          "steward",
+          "shugenja",
+          "pixie",
+          "fortuneteller",
+          "towncrier",
+          "monk",
+          "exorcist",
+          "gossip",
+          "artist",
+          "seamstress",
+          "philosopher",
+          "huntsman",
+          "soldier"
+        ],
+        "outsiders": [
+          "sweetheart",
+          "recluse",
+          "damsel",
+          "drunk"
+        ],
+        "minions": [
+          "godfather",
+          "summoner",
+          "assassin",
+          "goblin"
+        ],
+        "demons": [
+          "yaggababble",
+          "nodashii",
+          "ojo",
+          "po"
         ]
       }
     }
   ],
-  "activeId": "b1b3a063-ff4f-49fb-ab8e-c9306d14216b"
+  "activeId": "9474fa7a-596e-4cf2-858f-eae98c5e8666"
 }
