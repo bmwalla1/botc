@@ -77,7 +77,8 @@ function Grimoire() {
       position: index,
       isDead: false,
       hasGhostVote: false,
-      reminderTokens: []
+      reminderTokens: [],
+      isAlignmentFlipped: false
     }))
     
     setPlayers(newPlayers)
@@ -349,6 +350,22 @@ function Grimoire() {
     ))
   }
 
+  const handleFlipAlignment = () => {
+    if (!selectedPlayer) return
+    
+    setPlayers(prev => prev.map(player => 
+      player.id === selectedPlayer.id 
+        ? { ...player, isAlignmentFlipped: !player.isAlignmentFlipped }
+        : player
+    ))
+    
+    // Update selectedPlayer to reflect the change immediately
+    setSelectedPlayer(prev => ({
+      ...prev,
+      isAlignmentFlipped: !prev.isAlignmentFlipped
+    }))
+  }
+
   if (isLoadingScript || isLoadingGrimoire) {
     return (
       <div className="grimoire">
@@ -456,7 +473,7 @@ function Grimoire() {
                       <img
                         src={character.image}
                         alt={character.name}
-                        className={`character-icon ${player.isDead ? 'dead' : ''}`}
+                        className={`character-icon ${player.isDead ? 'dead' : ''} ${player.isAlignmentFlipped ? 'flipped' : ''}`}
                         onClick={() => handlePlayerClick(player)}
                         title="Click to manage character"
                       />
@@ -660,6 +677,12 @@ function Grimoire() {
                     >
                       Unassign Character
                     </button>
+                    <button 
+                      className={`status-btn ${selectedPlayer.isAlignmentFlipped ? 'warning-btn' : 'info-btn'}`}
+                      onClick={handleFlipAlignment}
+                    >
+                      {'Toggle Alignment'}
+                    </button>
                   </>
                 ) : (
                   <>
@@ -680,6 +703,12 @@ function Grimoire() {
                       onClick={handleUnassignCharacter}
                     >
                       Unassign Character
+                    </button>
+                    <button 
+                      className={`status-btn ${selectedPlayer.isAlignmentFlipped ? 'warning-btn' : 'info-btn'}`}
+                      onClick={handleFlipAlignment}
+                    >
+                      {'Toggle Alignment'}
                     </button>
                   </>
                 )}
