@@ -1,12 +1,34 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { grimoireApi } from '../services/api'
 import './Navigation.css'
 
 function Navigation() {
   const { isAuthenticated, logout } = useAuth()
   const location = useLocation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [hasActiveGame, setHasActiveGame] = useState(false)
+
+  // Check if there's an active game
+  useEffect(() => {
+    const checkActiveGame = async () => {
+      try {
+        const grimoireState = await grimoireApi.getGrimoire()
+        const hasGame = grimoireState && grimoireState.players && grimoireState.players.length > 0
+        setHasActiveGame(prev => prev !== hasGame ? hasGame : prev)
+      } catch (error) {
+        setHasActiveGame(false)
+      }
+    }
+
+    checkActiveGame()
+    
+    // Check every 10 seconds for active game status (reduced frequency)
+    const interval = setInterval(checkActiveGame, 10000)
+    
+    return () => clearInterval(interval)
+  }, [])
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen)
@@ -59,6 +81,14 @@ function Navigation() {
           >
             Characters
           </Link>
+          {hasActiveGame && (
+            <Link 
+              to="/current-game" 
+              className={`nav-link ${location.pathname === '/current-game' ? 'active' : ''}`}
+            >
+              Current Game
+            </Link>
+          )}
           {isAuthenticated && (
             <Link 
               to="/create-script" 
@@ -128,6 +158,15 @@ function Navigation() {
           >
             Characters
           </Link>
+          {hasActiveGame && (
+            <Link 
+              to="/current-game" 
+              className={`mobile-nav-link ${location.pathname === '/current-game' ? 'active' : ''}`}
+              onClick={closeMobileMenu}
+            >
+              Current Game
+            </Link>
+          )}
           {isAuthenticated && (
             <Link 
               to="/create-script" 

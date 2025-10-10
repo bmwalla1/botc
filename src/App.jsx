@@ -7,6 +7,7 @@ import CreateScript from './components/CreateScript'
 import Scripts from './components/Scripts'
 import Characters from './components/Characters'
 import Grimoire from './components/Grimoire'
+import CurrentGame from './components/CurrentGame'
 import './App.css'
 import { characterDetails } from './data/characters'
 
@@ -234,6 +235,10 @@ function App() {
                     <Grimoire />
                   </ProtectedRoute>
                 } 
+              />
+              <Route 
+                path="/current-game" 
+                element={<CurrentGame />} 
               />
             </Routes>
           </main>
