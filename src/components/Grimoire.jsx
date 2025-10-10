@@ -353,16 +353,16 @@ function Grimoire() {
                     <circle
                       cx={position.x}
                       cy={position.y}
-                      r="40"
+                      r="50"
                       className={`player-circle ${player.character ? 'assigned' : 'empty'} ${player.isDead ? 'dead' : ''}`}
                       onClick={() => handlePlayerClick(player)}
                     />
                     {character && (
                       <image
-                        x={position.x - 30}
-                        y={position.y - 30}
-                        width="60"
-                        height="60"
+                        x={position.x - 40}
+                        y={position.y - 40}
+                        width="80"
+                        height="80"
                         href={character.image}
                         className={`character-icon ${player.isDead ? 'dead' : ''}`}
                         onClick={() => handlePlayerClick(player)}
@@ -371,20 +371,20 @@ function Grimoire() {
                     )}
                     {player.isDead && (
                       <image
-                        x={position.x - 30}
-                        y={position.y - 58}
-                        width="60"
-                        height="60"
+                        x={position.x - 40}
+                        y={position.y - 70}
+                        width="80"
+                        height="80"
                         href="/assets/grim_tokens/deathshroud.png"
                         className="deathshroud-indicator"
                       />
                     )}
                     {player.hasGhostVote && (
                       <image
-                        x={position.x - 30}
-                        y={position.y - 90}
-                        width="60"
-                        height="60"
+                        x={position.x - 40}
+                        y={position.y - 110}
+                        width="80"
+                        height="80"
                         href="/assets/grim_tokens/ghostvote.png"
                         className="ghost-vote-indicator"
                       />
