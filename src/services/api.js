@@ -101,10 +101,10 @@ export const grimoireApi = {
   },
 
   // Update grimoire state
-  async updateGrimoire(players, gameActive) {
+  async updateGrimoire(players, gameActive, demonBluffs = []) {
     return apiRequest('/grimoire', {
       method: 'PUT',
-      body: JSON.stringify({ players, gameActive })
+      body: JSON.stringify({ players, gameActive, demonBluffs })
     })
   },
 

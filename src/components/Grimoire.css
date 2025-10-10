@@ -963,3 +963,119 @@
     font-size: 0.65rem;
   }
 }
+
+/* Demon Bluffs Styles */
+.demon-bluffs-section {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #e1e8ed;
+}
+
+.demon-bluffs-section h3 {
+  margin: 0 0 15px 0;
+  color: #2c3e50;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.demon-bluffs-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.demon-bluff-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  border: 2px solid #e74c3c;
+  border-radius: 12px;
+  padding: 15px;
+  min-width: 120px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.demon-bluff-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+}
+
+.demon-bluff-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: 2px solid #e74c3c;
+}
+
+.demon-bluff-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.demon-bluff-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.remove-bluff-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
+
+.remove-bluff-btn:hover {
+  background: #c0392b;
+}
+
+.add-bluff-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+
+.add-bluff-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 15px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-bluff-btn:hover {
+  background: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}

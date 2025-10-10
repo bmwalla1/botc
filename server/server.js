@@ -49,9 +49,14 @@ async function readGrimoire() {
   try {
     await fs.access(GRIMOIRE_FILE)
     const data = await fs.readFile(GRIMOIRE_FILE, 'utf8')
-    return JSON.parse(data)
+    const grimoire = JSON.parse(data)
+    // Ensure demonBluffs exists for backward compatibility
+    if (!grimoire.demonBluffs) {
+      grimoire.demonBluffs = []
+    }
+    return grimoire
   } catch {
-    return { players: [], gameActive: false }
+    return { players: [], gameActive: false, demonBluffs: [] }
   }
 }
 
@@ -243,7 +248,7 @@ app.get('/api/grimoire', async (req, res) => {
 // Update grimoire state
 app.put('/api/grimoire', async (req, res) => {
   try {
-    const { players, gameActive } = req.body
+    const { players, gameActive, demonBluffs = [] } = req.body
     
     if (!Array.isArray(players)) {
       return res.status(400).json({ error: 'Players must be an array' })
@@ -252,6 +257,7 @@ app.put('/api/grimoire', async (req, res) => {
     const grimoire = {
       players,
       gameActive: Boolean(gameActive),
+      demonBluffs: Array.isArray(demonBluffs) ? demonBluffs : [],
       updatedAt: new Date().toISOString()
     }
 
@@ -269,6 +275,7 @@ app.post('/api/grimoire/new-game', async (req, res) => {
     const grimoire = {
       players: [],
       gameActive: false,
+      demonBluffs: [],
       updatedAt: new Date().toISOString()
     }
 

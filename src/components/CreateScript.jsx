@@ -13,6 +13,7 @@ function CreateScript() {
   const [originalName, setOriginalName] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [searchTerm, setSearchTerm] = useState('')
   const location = useLocation()
 
   const limits = { townsfolk: 13, outsiders: 5, minions: 5, demons: 5 }
@@ -32,6 +33,23 @@ function CreateScript() {
   }, [])
 
   const groupedLists = useMemo(() => Object.entries(characterGroups), [])
+
+  // Filter characters based on search term
+  const filteredGroupedLists = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return groupedLists
+    }
+    
+    const searchLower = searchTerm.toLowerCase()
+    return groupedLists.map(([group, slugs]) => [
+      group,
+      slugs.filter(slug => {
+        const details = characterDetails[slug]
+        return details?.name?.toLowerCase().includes(searchLower) ||
+               details?.blurb?.toLowerCase().includes(searchLower)
+      })
+    ]).filter(([group, slugs]) => slugs.length > 0)
+  }, [groupedLists, searchTerm])
 
   // Load existing script for edit mode
   useEffect(() => {
@@ -133,7 +151,16 @@ function CreateScript() {
         </div>
       )}
       <div className="left-column">
-        {groupedLists.map(([group, slugs]) => (
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search characters..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="character-search"
+          />
+        </div>
+        {filteredGroupedLists.map(([group, slugs]) => (
           <div key={group} className="group-block">
             <h3 className="group-title">{group.charAt(0).toUpperCase() + group.slice(1)}</h3>
             <div className="group-list">
@@ -158,6 +185,11 @@ function CreateScript() {
             </div>
           </div>
         ))}
+        {searchTerm.trim() && filteredGroupedLists.length === 0 && (
+          <div className="no-results">
+            <p>No characters found matching "{searchTerm}"</p>
+          </div>
+        )}
       </div>
 
       <div className="center-panel">

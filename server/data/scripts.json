@@ -76,7 +76,47 @@
           "alhadikhia"
         ]
       }
+    },
+    {
+      "id": "b1b3a063-ff4f-49fb-ab8e-c9306d14216b",
+      "name": "Lunar Eclipse",
+      "createdAt": "2025-10-10T20:36:14.455Z",
+      "groups": {
+        "townsfolk": [
+          "grandmother",
+          "pixie",
+          "sailor",
+          "chambermaid",
+          "mathematician",
+          "innkeeper",
+          "lycanthrope",
+          "savant",
+          "artist",
+          "tealady",
+          "magician",
+          "mayor",
+          "cannibal"
+        ],
+        "outsiders": [
+          "goon",
+          "barber",
+          "lunatic",
+          "puzzlemaster"
+        ],
+        "minions": [
+          "godfather",
+          "devilsadvocate",
+          "spy",
+          "assassin",
+          "marionette"
+        ],
+        "demons": [
+          "nodashii",
+          "zombuul",
+          "vigormortis"
+        ]
+      }
     }
   ],
-  "activeId": "878b451e-7d1b-4f3a-b3a4-db20fdd607ed"
+  "activeId": "b1b3a063-ff4f-49fb-ab8e-c9306d14216b"
 }

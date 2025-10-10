@@ -15,6 +15,41 @@
   height: calc(100vh - 2rem); /* viewport height minus top padding */
 }
 
+.search-container {
+  margin-bottom: 1rem;
+  position: sticky;
+  top: 0;
+  background: white;
+  padding-bottom: 0.5rem;
+  z-index: 10;
+}
+
+.character-search {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.character-search:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.no-results {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #7f8c8d;
+}
+
+.no-results p {
+  margin: 0;
+  font-style: italic;
+}
+
 .group-block {
   margin-bottom: 1.5rem;
 }

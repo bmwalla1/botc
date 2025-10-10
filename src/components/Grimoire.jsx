@@ -18,6 +18,8 @@ function Grimoire() {
   const [isSaving, setIsSaving] = useState(false)
   const [showRandomizeModal, setShowRandomizeModal] = useState(false)
   const [selectedRoles, setSelectedRoles] = useState([])
+  const [demonBluffs, setDemonBluffs] = useState([])
+  const [isAddingBluff, setIsAddingBluff] = useState(false)
 
   useEffect(() => {
     const loadData = async () => {
@@ -33,6 +35,7 @@ function Grimoire() {
         // Load grimoire state
         const grimoireState = await grimoireApi.getGrimoire()
         setPlayers(grimoireState.players || [])
+        setDemonBluffs(grimoireState.demonBluffs || [])
         
       } catch (error) {
         console.error('Failed to load data:', error)
@@ -45,17 +48,17 @@ function Grimoire() {
     loadData()
   }, [])
 
-  // Save grimoire state whenever players change
+  // Save grimoire state whenever players or demon bluffs change
   useEffect(() => {
-    if (!isLoadingGrimoire && players.length > 0) {
+    if (!isLoadingGrimoire && (players.length > 0 || demonBluffs.length > 0)) {
       saveGrimoireState()
     }
-  }, [players, isLoadingGrimoire])
+  }, [players, demonBluffs, isLoadingGrimoire])
 
   const saveGrimoireState = async () => {
     try {
       setIsSaving(true)
-      await grimoireApi.updateGrimoire(players, players.length > 0)
+      await grimoireApi.updateGrimoire(players, players.length > 0, demonBluffs)
     } catch (error) {
       console.error('Failed to save grimoire state:', error)
     } finally {
@@ -98,16 +101,25 @@ function Grimoire() {
   }
 
   const handleCharacterSelect = (characterSlug) => {
-    if (!selectedPlayer) return
-    
-    setPlayers(prev => prev.map(player => 
-      player.id === selectedPlayer.id 
-        ? { ...player, character: characterSlug, isDead: false, hasGhostVote: false }
-        : player
-    ))
-    
-    setShowCharacterModal(false)
-    setSelectedPlayer(null)
+    if (isAddingBluff) {
+      // Add as demon bluff
+      const character = characterDetails[characterSlug]
+      if (character) {
+        addDemonBluff(character)
+      }
+      setShowCharacterModal(false)
+      setIsAddingBluff(false)
+    } else if (selectedPlayer) {
+      // Assign to player
+      setPlayers(prev => prev.map(player => 
+        player.id === selectedPlayer.id 
+          ? { ...player, character: characterSlug, isDead: false, hasGhostVote: false }
+          : player
+      ))
+      
+      setShowCharacterModal(false)
+      setSelectedPlayer(null)
+    }
   }
 
   const handleRemoveCharacter = (playerId) => {
@@ -460,6 +472,16 @@ function Grimoire() {
     setSelectedRoles([])
   }
 
+  const addDemonBluff = (character) => {
+    if (demonBluffs.length < 3 && !demonBluffs.find(bluff => bluff.id === character.id)) {
+      setDemonBluffs(prev => [...prev, character])
+    }
+  }
+
+  const removeDemonBluff = (characterId) => {
+    setDemonBluffs(prev => prev.filter(bluff => bluff.id !== characterId))
+  }
+
   if (isLoadingScript || isLoadingGrimoire) {
     return (
       <div className="grimoire">
@@ -635,6 +657,47 @@ function Grimoire() {
               )
             })}
           </div>
+
+          {/* Demon Bluffs Section */}
+          <div className="demon-bluffs-section">
+            <h3>Demon Bluffs ({demonBluffs.length}/3)</h3>
+            <div className="demon-bluffs-container">
+              {demonBluffs.map((bluff, index) => (
+                <div key={bluff.id} className="demon-bluff-item">
+                  <img
+                    src={bluff.image}
+                    alt={bluff.name}
+                    className="demon-bluff-image"
+                  />
+                  <div className="demon-bluff-info">
+                    <span className="demon-bluff-name">{bluff.name}</span>
+                    <button
+                      className="remove-bluff-btn"
+                      onClick={() => removeDemonBluff(bluff.id)}
+                      title="Remove bluff"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {demonBluffs.length < 3 && (
+                <div className="add-bluff-container">
+                  <button
+                    className="add-bluff-btn"
+                    onClick={() => {
+                      // Open character selection for demon bluffs
+                      setIsAddingBluff(true)
+                      setShowCharacterModal(true)
+                    }}
+                    title="Add demon bluff"
+                  >
+                    + Add Bluff
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
@@ -643,10 +706,13 @@ function Grimoire() {
         <div className="modal-overlay" onClick={() => setShowCharacterModal(false)}>
           <div className="character-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>Assign Character to {selectedPlayer?.name}</h3>
+              <h3>{isAddingBluff ? 'Add Demon Bluff' : `Assign Character to ${selectedPlayer?.name}`}</h3>
               <button 
                 className="close-btn"
-                onClick={() => setShowCharacterModal(false)}
+                onClick={() => {
+                  setShowCharacterModal(false)
+                  setIsAddingBluff(false)
+                }}
               >
                 ×
               </button>
