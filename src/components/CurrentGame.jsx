@@ -70,9 +70,9 @@ function CurrentGame() {
   // Calculate player positions in a circle
   const getPlayerPosition = (index, total) => {
     const angle = (index / total) * 2 * Math.PI - Math.PI / 2 // Start at 12 o'clock
-    const radius = 200
-    const centerX = 400
-    const centerY = 400
+    const radius = 350
+    const centerX = 500
+    const centerY = 500
     
     return {
       x: centerX + radius * Math.cos(angle),
