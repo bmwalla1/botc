@@ -247,14 +247,20 @@ function Grimoire() {
   }
 
   const getAvailableReminderTokens = () => {
-    const allTokens = getAllReminderTokens()
-    const assignedTokens = []
+    const allTokens = []
     players.forEach(player => {
-      if (player.reminderTokens) {
-        assignedTokens.push(...player.reminderTokens)
+      if (player.character) {
+        const character = characterDetails[player.character]
+        if (character && character.reminderTokens) {
+          character.reminderTokens.forEach(token => {
+            if (!allTokens.includes(token)) {
+              allTokens.push(token)
+            }
+          })
+        }
       }
     })
-    return allTokens.filter(token => !assignedTokens.includes(token))
+    return allTokens
   }
 
   const handleAddReminderToken = (token) => {
@@ -273,19 +279,22 @@ function Grimoire() {
     }))
   }
 
-  const handleRemoveReminderToken = (token) => {
+  const handleRemoveReminderToken = (token, tokenIndex) => {
     if (!selectedPlayer) return
     
     setPlayers(prev => prev.map(player => 
       player.id === selectedPlayer.id 
-        ? { ...player, reminderTokens: (player.reminderTokens || []).filter(t => t !== token) }
+        ? { 
+            ...player, 
+            reminderTokens: player.reminderTokens.filter((_, index) => index !== tokenIndex)
+          }
         : player
     ))
     
     // Update selectedPlayer to reflect the change immediately
     setSelectedPlayer(prev => ({
       ...prev,
-      reminderTokens: (prev.reminderTokens || []).filter(t => t !== token)
+      reminderTokens: prev.reminderTokens.filter((_, index) => index !== tokenIndex)
     }))
   }
 
@@ -568,7 +577,7 @@ function Grimoire() {
                                 />
                                 <button
                                   className="remove-token-btn"
-                                  onClick={() => handleRemoveReminderToken(token)}
+                                  onClick={() => handleRemoveReminderToken(token, index)}
                                   title="Remove token"
                                 >
                                   ×

@@ -229,6 +229,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  box-sizing: border-box;
 }
 
 .player-circle.empty {
