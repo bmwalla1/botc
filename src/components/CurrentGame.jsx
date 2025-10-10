@@ -112,6 +112,13 @@ function CurrentGame() {
                     👻
                   </div>
                 )}
+                
+                {/* About to die indicator */}
+                {player.aboutToDie && !player.isDead && (
+                  <div className="about-to-die-indicator">
+                    💀
+                  </div>
+                )}
               </div>
               
               <div className="player-name">

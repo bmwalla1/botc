@@ -83,7 +83,8 @@ function Grimoire() {
       isDead: false,
       hasGhostVote: false,
       reminderTokens: [],
-      isAlignmentFlipped: false
+      isAlignmentFlipped: false,
+      aboutToDie: false
     }))
     
     setPlayers(newPlayers)
@@ -160,12 +161,7 @@ function Grimoire() {
   const handleMarkDead = () => {
     if (!selectedPlayer) return
     
-    setPlayers(prev => prev.map(player => 
-      player.id === selectedPlayer.id 
-        ? { ...player, isDead: true, hasGhostVote: true }
-        : player
-    ))
-    
+    handlePlayerDeath(selectedPlayer.id)
     setShowStatusModal(false)
     setSelectedPlayer(null)
   }
@@ -482,6 +478,34 @@ function Grimoire() {
     setDemonBluffs(prev => prev.filter(bluff => bluff.id !== characterId))
   }
 
+  const toggleAboutToDie = (playerId) => {
+    setPlayers(prev => prev.map(player => {
+      if (player.id === playerId) {
+        return {
+          ...player,
+          aboutToDie: !player.aboutToDie,
+          // Remove about to die if player is already dead
+          isDead: player.isDead ? player.isDead : false
+        }
+      }
+      return player
+    }))
+  }
+
+  const handlePlayerDeath = (playerId) => {
+    setPlayers(prev => prev.map(player => {
+      if (player.id === playerId) {
+        return {
+          ...player,
+          isDead: true,
+          hasGhostVote: true,
+          aboutToDie: false // Remove about to die when player dies
+        }
+      }
+      return player
+    }))
+  }
+
   if (isLoadingScript || isLoadingGrimoire) {
     return (
       <div className="grimoire">
@@ -614,6 +638,11 @@ function Grimoire() {
                         alt="Ghost vote"
                         className="ghost-vote-indicator"
                       />
+                    )}
+                    {player.aboutToDie && !player.isDead && (
+                      <div className="about-to-die-indicator">
+                        💀
+                      </div>
                     )}
                   </div>
                   <div className={`player-name ${player.isDead ? 'dead' : ''}`}>
@@ -849,6 +878,16 @@ function Grimoire() {
                       onClick={handleFlipAlignment}
                     >
                       {'Toggle Alignment'}
+                    </button>
+                    <button 
+                      className={`status-btn ${selectedPlayer.aboutToDie ? 'warning-btn' : 'info-btn'}`}
+                      onClick={() => {
+                        toggleAboutToDie(selectedPlayer.id)
+                        setShowStatusModal(false)
+                        setSelectedPlayer(null)
+                      }}
+                    >
+                      {selectedPlayer.aboutToDie ? 'Remove About to Die' : 'Mark About to Die'}
                     </button>
                   </>
                 ) : (
