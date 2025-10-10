@@ -218,7 +218,13 @@ function Grimoire() {
     const angle = (index / total) * 2 * Math.PI - Math.PI / 2 // Start at 12 o'clock
     const maxTokens = getMaxReminderTokens()
     const tokenSpace = maxTokens * 30 // 30px per token for spacing
-    const baseRadius = 200
+    
+    // Scale radius based on number of players
+    const minRadius = 150
+    const maxRadius = 300
+    const playerScaleFactor = Math.max(1, total / 7) // Scale factor based on 7 players as baseline
+    const baseRadius = Math.min(maxRadius, minRadius + (total - 7) * 15)
+    
     const radius = baseRadius + tokenSpace
     const centerX = 400
     const centerY = 400

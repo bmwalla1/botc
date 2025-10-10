@@ -37,7 +37,46 @@
           "kazali"
         ]
       }
+    },
+    {
+      "id": "878b451e-7d1b-4f3a-b3a4-db20fdd607ed",
+      "name": "The Paradise Gardens",
+      "createdAt": "2025-10-10T18:38:44.159Z",
+      "groups": {
+        "townsfolk": [
+          "clockmaker",
+          "pixie",
+          "empath",
+          "dreamer",
+          "king",
+          "fortuneteller",
+          "gambler",
+          "oracle",
+          "innkeeper",
+          "chambermaid",
+          "slayer",
+          "philosopher",
+          "choirboy"
+        ],
+        "outsiders": [
+          "recluse",
+          "drunk",
+          "goon",
+          "klutz",
+          "barber"
+        ],
+        "minions": [
+          "witch",
+          "spy",
+          "baron",
+          "marionette",
+          "vizier"
+        ],
+        "demons": [
+          "alhadikhia"
+        ]
+      }
     }
   ],
-  "activeId": "441f3818-e642-4e4d-bebc-35234ee869bb"
+  "activeId": "878b451e-7d1b-4f3a-b3a4-db20fdd607ed"
 }
