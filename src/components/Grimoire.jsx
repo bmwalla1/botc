@@ -210,11 +210,18 @@ function Grimoire() {
     return characters
   }
 
+  const getMaxReminderTokens = () => {
+    return Math.max(...players.map(player => player.reminderTokens?.length || 0), 0)
+  }
+
   const getPlayerPosition = (index, total) => {
     const angle = (index / total) * 2 * Math.PI - Math.PI / 2 // Start at 12 o'clock
-    const radius = 200
-    const centerX = 300
-    const centerY = 300
+    const maxTokens = getMaxReminderTokens()
+    const tokenSpace = maxTokens * 30 // 30px per token for spacing
+    const baseRadius = 200
+    const radius = baseRadius + tokenSpace
+    const centerX = 400
+    const centerY = 400
     
     return {
       x: centerX + radius * Math.cos(angle),
@@ -371,80 +378,82 @@ function Grimoire() {
             </div>
           </div>
 
-          <div className="reminder-tokens-container">
-            <h3>Reminder Tokens</h3>
-            <div className="reminder-tokens-row">
-              {getAllReminderTokens().map((token, index) => (
-                <img
-                  key={index}
-                  src={`/assets/grim_tokens/${token}`}
-                  alt={token.replace('.png', '').replace(/_/g, ' ')}
-                  className="reminder-token"
-                  title={token.replace('.png', '').replace(/_/g, ' ')}
-                />
-              ))}
-            </div>
-          </div>
-
           <div className="players-circle">
-            <svg viewBox="0 0 600 600" className="circle-svg">
-              {players.map((player, index) => {
-                const position = getPlayerPosition(index, players.length)
-                const character = player.character ? characterDetails[player.character] : null
-                
-                return (
-                  <g key={player.id}>
-                    <circle
-                      cx={position.x}
-                      cy={position.y}
-                      r="50"
-                      className={`player-circle ${player.character ? 'assigned' : 'empty'} ${player.isDead ? 'dead' : ''}`}
-                      onClick={() => handlePlayerClick(player)}
-                    />
+            {players.map((player, index) => {
+              const position = getPlayerPosition(index, players.length)
+              const character = player.character ? characterDetails[player.character] : null
+              
+              return (
+                <div key={player.id} className="player-container" style={{
+                  left: position.x - 50,
+                  top: position.y - 50
+                }}>
+                  <div
+                    className={`player-circle ${player.character ? 'assigned' : 'empty'} ${player.isDead ? 'dead' : ''}`}
+                    onClick={() => handlePlayerClick(player)}
+                  >
                     {character && (
-                      <image
-                        x={position.x - 40}
-                        y={position.y - 40}
-                        width="80"
-                        height="80"
-                        href={character.image}
+                      <img
+                        src={character.image}
+                        alt={character.name}
                         className={`character-icon ${player.isDead ? 'dead' : ''}`}
                         onClick={() => handlePlayerClick(player)}
                         title="Click to manage character"
                       />
                     )}
                     {player.isDead && (
-                      <image
-                        x={position.x - 40}
-                        y={position.y - 70}
-                        width="80"
-                        height="80"
-                        href="/assets/grim_tokens/deathshroud.png"
+                      <img
+                        src="/assets/grim_tokens/deathshroud.png"
+                        alt="Death shroud"
                         className="deathshroud-indicator"
                       />
                     )}
                     {player.hasGhostVote && (
-                      <image
-                        x={position.x - 40}
-                        y={position.y - 110}
-                        width="80"
-                        height="80"
-                        href="/assets/grim_tokens/ghostvote.png"
+                      <img
+                        src="/assets/grim_tokens/ghostvote.png"
+                        alt="Ghost vote"
                         className="ghost-vote-indicator"
                       />
                     )}
-                    <text
-                      x={position.x}
-                      y={position.y + 60}
-                      className={`player-name ${player.isDead ? 'dead' : ''}`}
-                      textAnchor="middle"
-                    >
-                      {player.name}
-                    </text>
-                  </g>
-                )
-              })}
-            </svg>
+                  </div>
+                  <div className={`player-name ${player.isDead ? 'dead' : ''}`}>
+                    {player.name}
+                  </div>
+                  {player.reminderTokens && player.reminderTokens.length > 0 && (
+                    <div className="player-reminder-tokens-circle">
+                      {player.reminderTokens.map((token, tokenIndex) => {
+                        // Calculate direction towards center
+                        const centerX = 400
+                        const centerY = 400
+                        const dx = centerX - position.x
+                        const dy = centerY - position.y
+                        const distance = Math.sqrt(dx * dx + dy * dy)
+                        const unitX = dx / distance
+                        const unitY = dy / distance
+                        
+                        // Position tokens towards center
+                        const tokenX = position.x + (unitX * (80 + tokenIndex * 40))
+                        const tokenY = position.y + (unitY * (80 + tokenIndex * 40))
+                        
+                        return (
+                          <img
+                            key={tokenIndex}
+                            src={`/assets/grim_tokens/${token}`}
+                            alt={token.replace('.png', '').replace(/_/g, ' ')}
+                            className="circle-reminder-token"
+                            title={token.replace('.png', '').replace(/_/g, ' ')}
+                            style={{
+                              left: tokenX - position.x - 35,
+                              top: tokenY - position.y - 35
+                            }}
+                          />
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
         </div>
       )}

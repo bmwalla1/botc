@@ -187,10 +187,11 @@
 
 .reminder-tokens-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
-  overflow-x: auto;
+  gap: 2px;
+  max-width: 100%;
+  margin: 0 auto;
   padding: 0 20px;
 }
 
@@ -203,55 +204,68 @@
 
 .players-circle {
   position: relative;
-  width: 600px;
-  height: 600px;
+  width: 800px;
+  height: 800px;
   margin: 0 auto;
 }
 
-.circle-svg {
-  width: 100%;
-  height: 100%;
+.player-container {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .player-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
-  stroke-width: 3;
+  border: 3px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .player-circle.empty {
-  fill: #ecf0f1;
-  stroke: #bdc3c7;
+  background-color: #ecf0f1;
+  border-color: #bdc3c7;
 }
 
 .player-circle.empty:hover {
-  fill: #d5dbdb;
-  stroke: #95a5a6;
+  background-color: #d5dbdb;
+  border-color: #95a5a6;
 }
 
 .player-circle.assigned {
-  fill: #e8f5e8;
-  stroke: #27ae60;
+  background-color: #e8f5e8;
+  border-color: #27ae60;
 }
 
 .player-circle.assigned:hover {
-  fill: #d5f4e6;
-  stroke: #1e8449;
+  background-color: #d5f4e6;
+  border-color: #1e8449;
 }
 
 .player-circle.dead {
-  fill: #f8d7da !important;
-  stroke: #e74c3c !important;
+  background-color: #f8d7da !important;
+  border-color: #e74c3c !important;
 }
 
 .player-circle.dead:hover {
-  fill: #f5c6cb !important;
-  stroke: #c0392b !important;
+  background-color: #f5c6cb !important;
+  border-color: #c0392b !important;
 }
 
 .character-icon {
-  cursor: pointer;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
+  cursor: pointer;
   transition: opacity 0.3s ease;
 }
 
@@ -265,11 +279,21 @@
 }
 
 .deathshroud-indicator {
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  width: 80px;
+  height: 80px;
   opacity: 0.8;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
 }
 
 .ghost-vote-indicator {
+  position: absolute;
+  top: -40px;
+  left: 10px;
+  width: 80px;
+  height: 80px;
   opacity: 0.9;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
@@ -277,14 +301,29 @@
 .player-name {
   font-size: 14px;
   font-weight: 600;
-  fill: #2c3e50;
-  text-anchor: middle;
-  dominant-baseline: hanging;
+  color: #2c3e50;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .player-name.dead {
-  fill: #e74c3c;
+  color: #e74c3c;
   text-decoration: line-through;
+}
+
+.player-reminder-tokens-circle {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.circle-reminder-token {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  opacity: 0.9;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 /* Modal Styles */
