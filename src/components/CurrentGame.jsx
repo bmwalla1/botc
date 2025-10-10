@@ -2,6 +2,29 @@ import { useState, useEffect } from 'react'
 import { grimoireApi } from '../services/api'
 import './CurrentGame.css'
 
+// Character distribution function (copied from Grimoire component)
+const getCharacterDistribution = (playerCount) => {
+  const distributions = {
+    5: { townsfolk: 3, outsiders: 0, minions: 1, demons: 1 },
+    6: { townsfolk: 3, outsiders: 1, minions: 1, demons: 1 },
+    7: { townsfolk: 5, outsiders: 0, minions: 1, demons: 1 },
+    8: { townsfolk: 5, outsiders: 1, minions: 1, demons: 1 },
+    9: { townsfolk: 5, outsiders: 2, minions: 1, demons: 1 },
+    10: { townsfolk: 7, outsiders: 0, minions: 2, demons: 1 },
+    11: { townsfolk: 7, outsiders: 1, minions: 2, demons: 1 },
+    12: { townsfolk: 7, outsiders: 2, minions: 2, demons: 1 },
+    13: { townsfolk: 9, outsiders: 0, minions: 3, demons: 1 },
+    14: { townsfolk: 9, outsiders: 1, minions: 3, demons: 1 }
+  }
+  
+  // For 15+ players, use the same distribution as 15
+  if (playerCount >= 15) {
+    return { townsfolk: 9, outsiders: 2, minions: 3, demons: 1 }
+  }
+  
+  return distributions[playerCount] || { townsfolk: 0, outsiders: 0, minions: 0, demons: 0 }
+}
+
 function CurrentGame() {
   const [players, setPlayers] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -82,6 +105,30 @@ function CurrentGame() {
         <h2>Current Game</h2>
         <div className="player-count">
           {players.length} Player{players.length !== 1 ? 's' : ''}
+        </div>
+        <div className="player-distribution">
+          <h3>Default Distribution for {players.length} Players:</h3>
+          <div className="distribution-breakdown">
+            {(() => {
+              const distribution = getCharacterDistribution(players.length)
+              return (
+                <>
+                  <span className="distribution-item townsfolk">
+                    {distribution.townsfolk} Townsfolk
+                  </span>
+                  <span className="distribution-item outsiders">
+                    {distribution.outsiders} Outsider{distribution.outsiders !== 1 ? 's' : ''}
+                  </span>
+                  <span className="distribution-item minions">
+                    {distribution.minions} Minion{distribution.minions !== 1 ? 's' : ''}
+                  </span>
+                  <span className="distribution-item demons">
+                    {distribution.demons} Demon{distribution.demons !== 1 ? 's' : ''}
+                  </span>
+                </>
+              )
+            })()}
+          </div>
         </div>
       </div>
 

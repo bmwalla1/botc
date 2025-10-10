@@ -532,6 +532,32 @@ function Grimoire() {
       <div className="grimoire-header">
         <h1>Grimoire</h1>
         <p>Game Management for {activeScript.name}</p>
+        {players.length > 0 && (
+          <div className="player-distribution">
+            <h3>Default Distribution for {players.length} Players:</h3>
+            <div className="distribution-breakdown">
+              {(() => {
+                const distribution = getCharacterDistribution(players.length)
+                return (
+                  <>
+                    <span className="distribution-item townsfolk">
+                      {distribution.townsfolk} Townsfolk
+                    </span>
+                    <span className="distribution-item outsiders">
+                      {distribution.outsiders} Outsider{distribution.outsiders !== 1 ? 's' : ''}
+                    </span>
+                    <span className="distribution-item minions">
+                      {distribution.minions} Minion{distribution.minions !== 1 ? 's' : ''}
+                    </span>
+                    <span className="distribution-item demons">
+                      {distribution.demons} Demon{distribution.demons !== 1 ? 's' : ''}
+                    </span>
+                  </>
+                )
+              })()}
+            </div>
+          </div>
+        )}
       </div>
 
       {players.length === 0 ? (

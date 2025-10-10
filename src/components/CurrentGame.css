@@ -6,11 +6,20 @@
 
 .game-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
   border-bottom: 2px solid #e1e8ed;
+  text-align: center;
+}
+
+.game-header > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 .game-header h2 {
@@ -23,6 +32,54 @@
   color: #7f8c8d;
   font-weight: 600;
   font-size: 1.1rem;
+}
+
+/* Player Distribution Styles */
+.player-distribution {
+  margin-top: 10px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  max-width: 600px;
+}
+
+.player-distribution h3 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+.distribution-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.distribution-item {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.distribution-item.townsfolk {
+  background: #27ae60;
+}
+
+.distribution-item.outsiders {
+  background: #3498db;
+}
+
+.distribution-item.minions {
+  background: #e74c3c;
+}
+
+.distribution-item.demons {
+  background: #8e44ad;
 }
 
 .players-circle {
