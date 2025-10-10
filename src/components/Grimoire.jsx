@@ -440,9 +440,10 @@ function Grimoire() {
                         const unitX = dx / distance
                         const unitY = dy / distance
                         
-                        // Position tokens towards center
-                        const tokenX = position.x + (unitX * (80 + tokenIndex * 40))
-                        const tokenY = position.y + (unitY * (80 + tokenIndex * 40))
+                        // Position tokens towards center, with entire stack pushed in
+                        const tokenOffset = 100 + tokenIndex * 40
+                        const tokenX = position.x + (unitX * tokenOffset)
+                        const tokenY = position.y + (unitY * tokenOffset)
                         
                         return (
                           <img
@@ -453,7 +454,7 @@ function Grimoire() {
                             title={token.replace('.png', '').replace(/_/g, ' ')}
                             style={{
                               left: tokenX - position.x - 35,
-                              top: tokenY - position.y - 35
+                              top: tokenY - position.y - 35 - 60
                             }}
                           />
                         )
